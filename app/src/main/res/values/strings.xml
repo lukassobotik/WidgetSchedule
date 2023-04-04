@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WidgetSchedule</string>
+    <string name="schedule_url">Schedule URL</string>
+    <string name="save">Save</string>
 </resources>
