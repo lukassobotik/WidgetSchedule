@@ -1,5 +1,5 @@
-
 <resources>
+
     <style name="Theme.WidgetSchedule" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
@@ -29,5 +29,21 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
 
         <item name="android:statusBarColor">@color/md_theme_light_onSurface</item>
+    </style>
+
+    <style name="Theme.WidgetSchedule.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.WidgetSchedule.AppWidgetContainer"
+           parent="Theme.WidgetSchedule.AppWidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="appWidgetPadding">16dp</item>
     </style>
 </resources>

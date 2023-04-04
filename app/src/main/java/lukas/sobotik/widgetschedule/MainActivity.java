@@ -1,12 +1,10 @@
 package lukas.sobotik.widgetschedule;
 
 import android.database.Cursor;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;

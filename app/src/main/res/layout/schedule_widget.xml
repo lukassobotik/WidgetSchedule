@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/Widget.WidgetSchedule.AppWidget.Container"
+                android:theme="@style/Theme.WidgetSchedule.AppWidgetContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="Schedule"
+                    android:textSize="20sp"
+                    android:padding="16dp"
+                    />
+
+            <ListView
+                    android:id="@+id/calendar_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </LinearLayout>
+</RelativeLayout>
