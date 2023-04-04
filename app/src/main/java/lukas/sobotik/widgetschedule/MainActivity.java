@@ -53,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Custom Logging", String.valueOf(entry.getId()));
             Log.d("Custom Logging", entry.getSettingName().toString());
             Log.d("Custom Logging", entry.getValue());
-        }
 
-        Objects.requireNonNull(scheduleURL.getEditText()).setText(settingsList.get(0).getValue());
+            if (entry.getSettingName().equals(Settings.ScheduleURL)) {
+                Objects.requireNonNull(scheduleURL.getEditText()).setText(entry.getValue());
+            }
+        }
     }
 
     public void initialize() {
