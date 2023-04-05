@@ -4,26 +4,47 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-    <TextView
-            android:id="@+id/calendar_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="16dp"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/calendar_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_below="@+id/calendar_date"
-            android:layout_alignStart="@+id/calendar_date"/>
+        <RelativeLayout
+                android:id="@+id/calendar_date_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:gravity="center_horizontal">
+            <TextView
+                    android:id="@+id/calendar_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Wed"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+
+            <TextView
+                    android:id="@+id/calendar_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:layout_below="@+id/calendar_date"
+                    android:layout_alignStart="@+id/calendar_date"
+                    android:layout_alignEnd="@id/calendar_date"
+            />
+        </RelativeLayout>
+
+        <ListView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+        />
+    </LinearLayout>
 
 </RelativeLayout>
