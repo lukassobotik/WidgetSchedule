@@ -19,15 +19,25 @@
         <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textUri"
-                />
+                android:inputType="textUri" />
     </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-                android:id="@+id/database_save_button"
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/database_save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/schedule_html"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                />
+                android:layout_height="wrap_content" />
+
+    </ScrollView>
+
 
 </LinearLayout>

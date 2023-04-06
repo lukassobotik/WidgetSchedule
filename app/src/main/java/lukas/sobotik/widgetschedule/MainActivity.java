@@ -4,9 +4,15 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,8 +21,11 @@ public class MainActivity extends AppCompatActivity {
 
     TextInputLayout scheduleURL;
     Button saveButton;
-    DatabaseHelper databaseHelper;
+    SettingsDatabaseHelper settingsDatabaseHelper;
+    ScheduleDatabaseHelper scheduleDatabaseHelper;
     List<SettingsEntry> settingsList;
+    List<ScheduleEntry> scheduleList;
+    List<String> HTMLTables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,23 +37,25 @@ public class MainActivity extends AppCompatActivity {
         loadDataFromDatabase();
 
         saveButton.setOnClickListener(v -> {
-            databaseHelper.addItem(new SettingsEntry(Settings.ScheduleURL, Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim()));
+            String scheduleLink = Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim();
+            settingsDatabaseHelper.addItem(new SettingsEntry(Settings.ScheduleURL, scheduleLink));
+            fetchDataFromURL(scheduleLink);
         });
     }
 
     private void loadDataFromDatabase() {
-        Cursor cursor = databaseHelper.readAllData();
-        if (cursor.getCount() == 0) {
+        Cursor settingsCursor = settingsDatabaseHelper.readAllData();
+        if (settingsCursor.getCount() == 0) {
             return;
         }
 
-        while (cursor.moveToNext()) {
+        while (settingsCursor.moveToNext()) {
             Settings settings = null;
-            if (Objects.equals(cursor.getString(1), Settings.ScheduleURL.toString())) {
+            if (Objects.equals(settingsCursor.getString(1), Settings.ScheduleURL.toString())) {
                 settings = Settings.ScheduleURL;
             }
 
-            settingsList.add(new SettingsEntry(Integer.parseInt(cursor.getString(0)), Objects.requireNonNull(settings), cursor.getString(2)));
+            settingsList.add(new SettingsEntry(Integer.parseInt(settingsCursor.getString(0)), Objects.requireNonNull(settings), settingsCursor.getString(2)));
         }
 
         for (SettingsEntry entry : settingsList) {
@@ -56,11 +67,57 @@ public class MainActivity extends AppCompatActivity {
                 Objects.requireNonNull(scheduleURL.getEditText()).setText(entry.getValue());
             }
         }
+
+        Cursor scheduleCursor = scheduleDatabaseHelper.readAllData();
+        if (scheduleCursor.getCount() == 0) {
+            return;
+        }
+
+        while (scheduleCursor.moveToNext()) {
+            scheduleList.add(new ScheduleEntry(Integer.parseInt(scheduleCursor.getString(0)), scheduleCursor.getString(1), scheduleCursor.getString(2)));
+
+            TextView textView = findViewById(R.id.schedule_html);
+            textView.setText(scheduleCursor.getString(2));
+        }
+    }
+
+    public void fetchDataFromURL(String url) {
+        Thread thread = new Thread(() -> {
+            try  {
+                Log.d("Custom Logging", "Fetching Data...");
+                try {
+                    Document doc = Jsoup.connect(url).get();
+                    Elements tables = doc.select("table");
+                    for(Element table : tables) {
+                        Log.d("Custom Logging", table.html());
+                        HTMLTables.add(table.html());
+                    }
+                    StringBuilder html = new StringBuilder();
+                    for (String table : HTMLTables) {
+                        // This is to remove the unnecessary tables
+                        if (table.contains("<tr class=\"row_0 row_first even\">") || table.contains("Ekonomika")) continue;
+
+                        html.append(table);
+                    }
+
+                    scheduleDatabaseHelper.addItem(new ScheduleEntry(url, html.toString()));
+                } catch (IOException e) {
+                    Log.d("Custom Logging", "error " + e.getMessage());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        thread.start();
     }
 
     public void initialize() {
-        databaseHelper = new DatabaseHelper(this);
+        settingsDatabaseHelper = new SettingsDatabaseHelper(this);
+        scheduleDatabaseHelper = new ScheduleDatabaseHelper(this);
         settingsList = new ArrayList<>();
+        scheduleList = new ArrayList<>();
+        HTMLTables = new ArrayList<>();
 
         scheduleURL = findViewById(R.id.schedule_url_text_input);
         saveButton = findViewById(R.id.database_save_button);

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class SettingsDatabaseHelper extends SQLiteOpenHelper {
     Context context;
     public static final String DATABASE_NAME = "UserSettings.db";
     public static final int DATABASE_VERSION = 1;
@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_VALUE = "value";
 
 
-    public DatabaseHelper(@Nullable Context context) {
+    public SettingsDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
