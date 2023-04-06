@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="8dp"
                 android:id="@+id/calendar_item_parent_layout">
 
     <LinearLayout
@@ -22,7 +22,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:textStyle="bold"
                     android:text="@string/schedule_date_example"
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -35,6 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     android:text="@string/schedule_day_example"
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -50,8 +50,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_background"
-                android:layout_marginStart="16dp"
-                android:padding="16dp">
+                android:backgroundTint="@color/yellow"
+                android:layout_marginStart="8dp"
+                android:padding="8dp">
             <TextView
                     android:id="@+id/schedule_item_title"
                     android:layout_width="match_parent"

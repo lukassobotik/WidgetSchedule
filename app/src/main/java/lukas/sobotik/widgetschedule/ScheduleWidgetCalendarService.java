@@ -113,7 +113,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
             if (event.isOnTheSameDayAsEventAbove()) {
                 remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
-                int padding = (int) (16 * Resources.getSystem().getDisplayMetrics().density);
+                int padding = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
                 remoteViews.setViewPadding(R.id.calendar_item_parent_layout, padding, 0, padding, padding);
             }
 

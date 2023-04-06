@@ -1,4 +1,7 @@
 <resources>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_gray">#414141</color>
+    <color name="yellow">#FFCC31</color>
     <color name="seed">#e60058</color>
     <color name="md_theme_light_primary">#BD0047</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
