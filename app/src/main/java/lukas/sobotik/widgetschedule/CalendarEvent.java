@@ -40,9 +40,16 @@ public class CalendarEvent {
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
+    public boolean isOnTheSameDayAsEventAbove() {
+        return isOnTheSameDayAsEventAbove;
+    }
+    public void setOnTheSameDayAsEventAbove(boolean onTheSameDayAsEventAbove) {
+        isOnTheSameDayAsEventAbove = onTheSameDayAsEventAbove;
+    }
 
     private int id;
     private LocalDate date;
     private String timespan;
     private String eventName;
+    private boolean isOnTheSameDayAsEventAbove;
 }

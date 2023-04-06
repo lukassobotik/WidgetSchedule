@@ -3,6 +3,10 @@ package lukas.sobotik.widgetschedule;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -29,14 +33,31 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-            CalendarEvent exampleEvent = new CalendarEvent(LocalDate.now());
-            exampleEvent.setEventName(context.getResources().getString(R.string.schedule_item_title_example));
-            exampleEvent.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
+            CalendarEvent exampleEvent1 = new CalendarEvent(LocalDate.now());
+            exampleEvent1.setEventName(context.getResources().getString(R.string.schedule_item_title_example));
+            exampleEvent1.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
+            exampleEvent1.setOnTheSameDayAsEventAbove(false);
+
+            CalendarEvent exampleEvent2 = new CalendarEvent(LocalDate.now());
+            exampleEvent2.setEventName(context.getResources().getString(R.string.schedule_item_title_example));
+            exampleEvent2.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
+            exampleEvent2.setOnTheSameDayAsEventAbove(exampleEvent1.getDate().equals(exampleEvent2.getDate()));
+
+            CalendarEvent exampleEvent3 = new CalendarEvent(LocalDate.now());
+            exampleEvent3.setEventName("Different Meeting");
+            exampleEvent3.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
+            exampleEvent3.setOnTheSameDayAsEventAbove(exampleEvent2.getDate().equals(exampleEvent3.getDate()));
+
+            CalendarEvent exampleEvent4 = new CalendarEvent(LocalDate.now().plusDays(1));
+            exampleEvent4.setEventName("Different Meeting");
+            exampleEvent4.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
+            exampleEvent4.setOnTheSameDayAsEventAbove(exampleEvent3.getDate().equals(exampleEvent4.getDate()));
 
             data = new ArrayList<>();
-            data.add(exampleEvent);
-            data.add(exampleEvent);
-            data.add(exampleEvent);
+            data.add(exampleEvent1);
+            data.add(exampleEvent2);
+            data.add(exampleEvent3);
+            data.add(exampleEvent4);
         }
 
         @Override
@@ -61,6 +82,9 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             remoteViews.setTextViewText(R.id.schedule_date, data.get(position).getFormattedMonth());
             remoteViews.setTextViewText(R.id.schedule_item_title, data.get(position).getEventName());
             remoteViews.setTextViewText(R.id.schedule_item_timespan, data.get(position).getTimespan());
+
+            remoteViews = groupSimilarEvents(remoteViews, position);
+
             return remoteViews;
         }
 
@@ -82,6 +106,18 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return false;
+        }
+
+        public RemoteViews groupSimilarEvents(RemoteViews remoteViews, int position) {
+            CalendarEvent event = data.get(position);
+
+            if (event.isOnTheSameDayAsEventAbove()) {
+                remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
+                int padding = (int) (16 * Resources.getSystem().getDisplayMetrics().density);
+                remoteViews.setViewPadding(R.id.calendar_item_parent_layout, padding, 0, padding, padding);
+            }
+
+            return remoteViews;
         }
     }
 }
