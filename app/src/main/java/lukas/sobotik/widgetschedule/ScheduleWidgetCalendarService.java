@@ -3,7 +3,6 @@ package lukas.sobotik.widgetschedule;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -14,7 +13,6 @@ import java.util.List;
 public class ScheduleWidgetCalendarService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.d("Custom Logging", "Calendar Service Creation Log");
         return new ScheduleWidgetCalendarFactory(this.getApplicationContext(), intent);
     }
 
@@ -22,7 +20,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         private Context context;
         private int appWidgetId;
-        private List<CalendarDay> data;
+        private List<CalendarEvent> data;
 
         ScheduleWidgetCalendarFactory(Context context, Intent intent) {
             this.context = context;
@@ -31,18 +29,14 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
+            CalendarEvent exampleEvent = new CalendarEvent(LocalDate.now());
+            exampleEvent.setEventName(context.getResources().getString(R.string.schedule_item_title_example));
+            exampleEvent.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
+
             data = new ArrayList<>();
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
-            data.add(new CalendarDay(LocalDate.now()));
+            data.add(exampleEvent);
+            data.add(exampleEvent);
+            data.add(exampleEvent);
         }
 
         @Override
@@ -63,11 +57,10 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.calendar_item);
-            remoteViews.setTextViewText(R.id.calendar_day, data.get(position).getFormattedDay());
-            remoteViews.setTextViewText(R.id.calendar_date, data.get(position).getFormattedMonth());
-            Log.d("Custom Logging", "Calendar Service Log 1");
-            remoteViews.setRemoteAdapter(R.id.day_listview, new Intent(context, ScheduleWidgetDayService.class));
-            Log.d("Custom Logging", "Calendar Service Log 2");
+            remoteViews.setTextViewText(R.id.schedule_day, data.get(position).getFormattedDay());
+            remoteViews.setTextViewText(R.id.schedule_date, data.get(position).getFormattedMonth());
+            remoteViews.setTextViewText(R.id.schedule_item_title, data.get(position).getEventName());
+            remoteViews.setTextViewText(R.id.schedule_item_timespan, data.get(position).getTimespan());
             return remoteViews;
         }
 

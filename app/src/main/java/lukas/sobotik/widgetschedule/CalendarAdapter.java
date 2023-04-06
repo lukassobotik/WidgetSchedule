@@ -10,10 +10,10 @@ import android.widget.TextView;
 import java.util.List;
 
 public class CalendarAdapter extends BaseAdapter {
-    private List<CalendarDay> data;
+    private List<CalendarEvent> data;
     private LayoutInflater inflater;
 
-    public CalendarAdapter(Context context, List<CalendarDay> data) {
+    public CalendarAdapter(Context context, List<CalendarEvent> data) {
         this.data = data;
         inflater = LayoutInflater.from(context);
     }
@@ -43,14 +43,14 @@ public class CalendarAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.calendar_item, null);
             holder = new ViewHolder();
-            holder.title = convertView.findViewById(R.id.calendar_date);
-            holder.description = convertView.findViewById(R.id.calendar_day);
+            holder.title = convertView.findViewById(R.id.schedule_date);
+            holder.description = convertView.findViewById(R.id.schedule_day);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        CalendarDay item = data.get(position);
+        CalendarEvent item = data.get(position);
         holder.title.setText(item.getDate().getDayOfMonth());
         holder.description.setText(item.getDay());
 

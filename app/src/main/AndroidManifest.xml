@@ -39,6 +39,5 @@
         </activity>
 
         <service android:name=".ScheduleWidgetCalendarService" android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name=".ScheduleWidgetDayService" android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 </manifest>

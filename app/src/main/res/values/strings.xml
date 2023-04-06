@@ -2,7 +2,10 @@
     <string name="app_name">WidgetSchedule</string>
     <string name="schedule_url">Schedule URL</string>
     <string name="save">Save</string>
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="schedule_item_title_example">Meeting</string>
+    <string name="schedule_item_timespan_example">9am-9:45am</string>
+    <string name="schedule_date_example">Wed</string>
+    <string name="schedule_day_example">1</string>
 </resources>
