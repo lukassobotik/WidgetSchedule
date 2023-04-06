@@ -3,6 +3,7 @@ package lukas.sobotik.widgetschedule;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -10,19 +11,20 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleWidgetService extends RemoteViewsService {
+public class ScheduleWidgetDayService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ScheduleWidgetItemFactory(this.getApplicationContext(), intent);
+        Log.d("Custom Logging", "Day Service Creation Log");
+        return new ScheduleWidgetDayFactory(this.getApplicationContext(), intent);
     }
 
-    static class ScheduleWidgetItemFactory implements RemoteViewsFactory {
+    static class ScheduleWidgetDayFactory implements RemoteViewsFactory {
 
-        private Context context;
+        private final Context context;
         private int appWidgetId;
         private List<CalendarDay> data;
 
-        ScheduleWidgetItemFactory(Context context, Intent intent) {
+        ScheduleWidgetDayFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
@@ -60,9 +62,9 @@ public class ScheduleWidgetService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int position) {
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.calendar_item);
-            remoteViews.setTextViewText(R.id.calendar_date, data.get(position).getFormattedDate());
-            remoteViews.setTextViewText(R.id.calendar_day, data.get(position).getDay());
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.day_item);
+            Log.d("Custom Logging", "Day Service Log");
+            remoteViews.setTextViewText(R.id.day_subject, data.get(position).getFormattedDay());
             return remoteViews;
         }
 
@@ -73,7 +75,7 @@ public class ScheduleWidgetService extends RemoteViewsService {
 
         @Override
         public int getViewTypeCount() {
-            return 1;
+            return 3;
         }
 
         @Override

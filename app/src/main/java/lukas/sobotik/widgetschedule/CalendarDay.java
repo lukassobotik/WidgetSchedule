@@ -2,12 +2,10 @@ package lukas.sobotik.widgetschedule;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 
 public class CalendarDay {
 
     private LocalDate date;
-    private String day;
     private int id;
 
     public int getId() {
@@ -34,8 +32,11 @@ public class CalendarDay {
         return date.getDayOfWeek().toString();
     }
 
-    public String getFormattedDate() {
-        return date.format(DateTimeFormatter.ofPattern("MMMM d"));
+    public String getFormattedDay() {
+        return date.format(DateTimeFormatter.ofPattern("d"));
+    }
+    public String getFormattedMonth() {
+        return date.format(DateTimeFormatter.ofPattern("MMM"));
     }
 
 }
