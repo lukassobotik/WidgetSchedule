@@ -43,7 +43,7 @@ public class SettingsDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_ID, entry.getId());
-        cv.put(COLUMN_NAME, entry.getSettingName().toString());
+        cv.put(COLUMN_NAME, String.valueOf(entry.getSettingName()));
         cv.put(COLUMN_VALUE, entry.getValue());
 
         long result = db.insert(TABLE_NAME, null, cv);
@@ -69,7 +69,7 @@ public class SettingsDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_ID, entry.getId());
-        cv.put(COLUMN_NAME, entry.getSettingName().toString());
+        cv.put(COLUMN_NAME, String.valueOf(entry.getSettingName()));
         cv.put(COLUMN_VALUE, entry.getValue());
 
         String stringId = String.valueOf(entry.getId());

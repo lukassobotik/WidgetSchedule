@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 
 public class SettingsEntry {
     private int id;
-    private Settings settingName;
+    private int settingName;
     private String value;
 
-    public SettingsEntry(int id, @NonNull Settings settingName, @NonNull String value) {
+    public SettingsEntry(int id, @NonNull int settingName, @NonNull String value) {
         this.id = id;
         this.settingName = settingName;
         this.value = value;
     }
 
-    public SettingsEntry(@NonNull Settings settingName, @NonNull String value) {
+    public SettingsEntry(@NonNull int settingName, @NonNull String value) {
         this.settingName = settingName;
         this.value = value;
     }
@@ -26,11 +26,11 @@ public class SettingsEntry {
         this.id = id;
     }
 
-    public Settings getSettingName() {
+    public int getSettingName() {
         return settingName;
     }
 
-    public void setSettingName(Settings settingName) {
+    public void setSettingName(int settingName) {
         this.settingName = settingName;
     }
 

@@ -1,5 +1,5 @@
 package lukas.sobotik.widgetschedule;
 
-public enum Settings {
-    ScheduleURL,
+public class Settings {
+    public final int ScheduleURL = 0;
 }

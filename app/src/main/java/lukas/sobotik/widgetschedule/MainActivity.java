@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
         saveButton.setOnClickListener(v -> {
             String scheduleLink = Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim();
-            settingsDatabaseHelper.addItem(new SettingsEntry(Settings.ScheduleURL, scheduleLink));
+            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ScheduleURL, scheduleLink));
             fetchDataFromURL(scheduleLink);
         });
+
+        parseHTML();
     }
 
     private void loadDataFromDatabase() {
@@ -50,20 +52,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         while (settingsCursor.moveToNext()) {
-            Settings settings = null;
-            if (Objects.equals(settingsCursor.getString(1), Settings.ScheduleURL.toString())) {
-                settings = Settings.ScheduleURL;
+            int settings = -1;
+            if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ScheduleURL))) {
+                settings = new Settings().ScheduleURL;
             }
 
-            settingsList.add(new SettingsEntry(Integer.parseInt(settingsCursor.getString(0)), Objects.requireNonNull(settings), settingsCursor.getString(2)));
+            settingsList.add(new SettingsEntry(Integer.parseInt(settingsCursor.getString(0)), settings, settingsCursor.getString(2)));
         }
 
         for (SettingsEntry entry : settingsList) {
             Log.d("Custom Logging", String.valueOf(entry.getId()));
-            Log.d("Custom Logging", entry.getSettingName().toString());
+            Log.d("Custom Logging", String.valueOf(entry.getSettingName()));
             Log.d("Custom Logging", entry.getValue());
 
-            if (entry.getSettingName().equals(Settings.ScheduleURL)) {
+            if (String.valueOf(entry.getSettingName()).equals(String.valueOf(new Settings().ScheduleURL))) {
                 Objects.requireNonNull(scheduleURL.getEditText()).setText(entry.getValue());
             }
         }
@@ -87,20 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Custom Logging", "Fetching Data...");
                 try {
                     Document doc = Jsoup.connect(url).get();
-                    Elements tables = doc.select("table");
-                    for(Element table : tables) {
-                        Log.d("Custom Logging", table.html());
-                        HTMLTables.add(table.html());
-                    }
-                    StringBuilder html = new StringBuilder();
-                    for (String table : HTMLTables) {
-                        // This is to remove the unnecessary tables
-                        if (table.contains("<tr class=\"row_0 row_first even\">") || table.contains("Ekonomika")) continue;
-
-                        html.append(table);
-                    }
-
-                    scheduleDatabaseHelper.addItem(new ScheduleEntry(url, html.toString()));
+                    scheduleDatabaseHelper.addItem(new ScheduleEntry(url, doc.html()));
                 } catch (IOException e) {
                     Log.d("Custom Logging", "error " + e.getMessage());
                 }
@@ -121,5 +110,20 @@ public class MainActivity extends AppCompatActivity {
 
         scheduleURL = findViewById(R.id.schedule_url_text_input);
         saveButton = findViewById(R.id.database_save_button);
+    }
+
+    public void parseHTML() {
+        for (ScheduleEntry entry : scheduleList) {
+            String html = entry.getScheduleHTML();
+
+            Document document = Jsoup.parse(html);
+
+            Elements trs = document.getElementsByTag("tr");
+//            for (Element tr : trs) {
+//                Log.d("Custom Logging", tr.html());
+//            }
+            Element tr = document.getElementsByTag("tr").get(2);
+            Log.d("Custom Logging", tr.html());
+        }
     }
 }
