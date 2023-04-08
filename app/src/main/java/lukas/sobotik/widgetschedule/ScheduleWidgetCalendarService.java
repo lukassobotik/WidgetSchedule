@@ -32,6 +32,12 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         private int appWidgetId;
         private List<CalendarEvent> data;
 
+        //TODO: Integrate with the database and settings
+        boolean containsDayOfWeek = true;
+        boolean removeEmptyItems = true;
+        String timespanSplitter = "-";
+
+        // HTML Data Parsing
         int columnNumber;
         int itemsIteration;
         String rowDate;
@@ -76,7 +82,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
             //Group items on the same day
             CalendarEvent event = data.get(position);
-            Log.d("Custom Logging", event.getEventName() + " - " + event.isOnTheSameDayAsEventAbove());
             int padding8dp = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
             if (event.isOnTheSameDayAsEventAbove()) {
                 remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
@@ -128,10 +133,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         }
 
         public void parseHTML(ScheduleEntry entry) {
-            //TODO: Integrate with the database and settings
-            boolean containsDayOfWeek = true;
-            String timespanSplitter = "-";
-
             String html = entry.getScheduleHTML();
             Document document = Jsoup.parse(html);
             Elements tables = document.getElementsByTag("table");
@@ -196,13 +197,13 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         private void renderData() {
             CalendarEvent previousEvent = null;
             for (CalendarEvent event : calendarEvents) {
+                if (removeEmptyItems && (event.getEventName().equals("-") || event.getEventName().equals(" "))) continue;
+
                 if (previousEvent == null) {
                     event.setOnTheSameDayAsEventAbove(false);
-                    event.setTimespan(event.getTimespan() + " - " + event.isOnTheSameDayAsEventAbove());
                     data.add(event);
                 } else if (event.getDate() != null){
                     event.setOnTheSameDayAsEventAbove(previousEvent.getDate().equals(event.getDate()));
-                    event.setTimespan(event.getTimespan() + " - " + event.isOnTheSameDayAsEventAbove());
                     data.add(event);
                 }
 
