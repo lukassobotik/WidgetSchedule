@@ -35,6 +35,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         //TODO: Integrate with the database and settings
         boolean containsDayOfWeek = true;
         boolean removeEmptyItems = true;
+        boolean doNotShowLastTable = true;
         String timespanSplitter = "-";
 
         // HTML Data Parsing
@@ -138,6 +139,8 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             Elements tables = document.getElementsByTag("table");
 
             for (Element table : tables) {
+                if (doNotShowLastTable && table.html().equals(Objects.requireNonNull(tables.last()).html())) return;
+
                 Elements trs = table.getElementsByTag("tr");
                 rowNumber = 0;
                 timespans = new ArrayList<>();
