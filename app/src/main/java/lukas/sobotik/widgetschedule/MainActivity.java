@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ScheduleURL, scheduleLink));
             fetchDataFromURL(scheduleLink);
         });
-
-        parseHTML();
     }
 
     private void loadDataFromDatabase() {
@@ -110,70 +108,5 @@ public class MainActivity extends AppCompatActivity {
 
         scheduleURL = findViewById(R.id.schedule_url_text_input);
         saveButton = findViewById(R.id.database_save_button);
-    }
-
-    public void parseHTML() {
-        //TODO: Integrate with the database and settings
-        boolean containsDayOfWeek = true;
-        String timespanSplitter = "-";
-
-        for (ScheduleEntry entry : scheduleList) {
-            String html = entry.getScheduleHTML();
-
-            Document document = Jsoup.parse(html);
-
-            Elements tables = document.getElementsByTag("table");
-            for (Element table : tables) {
-                Elements trs = table.getElementsByTag("tr");
-                int rowNumber = 0;
-                List<String> timespans = new ArrayList<>();
-                List<CalendarEvent> items = new ArrayList<>();
-                for (Element tr : trs) {
-                    rowNumber += 1;
-                    Elements tds = tr.children();
-
-                    int columnNumber = 0;
-                    int itemsIteration = 0;
-                    String rowDate;
-                    LocalDate date = null;
-                    for (Element td : tds) {
-                        if (td.html().startsWith("<input") || td.html().equals("&nbsp;")) continue;
-
-                        if (rowNumber == 1) {
-                            timespans.add(td.html());
-                        }
-
-                        if (columnNumber == 0 && !td.ownText().isEmpty() && rowNumber > 1) {
-                            rowDate = td.ownText();
-                            try {
-                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
-                                date = LocalDate.parse(rowDate, formatter);
-                            } catch (Exception e) {
-                                Log.e("ERROR", e.getMessage());
-                            }
-                        }
-
-                        if (rowNumber > 1 && columnNumber < timespans.size() && columnNumber != 0 && columnNumber != 1) {
-                            CalendarEvent event = new CalendarEvent(date);
-                            event.setEventName(td.html());
-                            event.setTimespan(Objects.requireNonNull(timespans.get(itemsIteration)));
-                            items.add(event);
-                            itemsIteration++;
-                        }
-
-                        columnNumber += 1;
-                    }
-                }
-
-                for (CalendarEvent event : items) {
-                    Log.d("Custom Logging", "name: " + event.getEventName());
-                    Log.d("Custom Logging", "timespan: " + event.getTimespan());
-                    Log.d("Custom Logging", "day: " + event.getFormattedDay());
-                    Log.d("Custom Logging", "month: " + event.getFormattedMonth());
-                }
-
-                Log.d("Custom Logging", "-------------------------");
-            }
-        }
     }
 }

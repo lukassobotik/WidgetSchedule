@@ -4,13 +4,20 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.view.View;
+import android.database.Cursor;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ScheduleWidgetCalendarService extends RemoteViewsService {
     @Override
@@ -24,6 +31,14 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         private int appWidgetId;
         private List<CalendarEvent> data;
 
+        int columnNumber;
+        int itemsIteration;
+        String rowDate;
+        LocalDate date;
+        List<String> timespans;
+        List<CalendarEvent> calendarEvents;
+        int rowNumber;
+
         ScheduleWidgetCalendarFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -31,31 +46,8 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-            CalendarEvent exampleEvent1 = new CalendarEvent(LocalDate.now());
-            exampleEvent1.setEventName(context.getResources().getString(R.string.schedule_item_title_example));
-            exampleEvent1.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
-            exampleEvent1.setOnTheSameDayAsEventAbove(false);
-
-            CalendarEvent exampleEvent2 = new CalendarEvent(LocalDate.now());
-            exampleEvent2.setEventName(context.getResources().getString(R.string.schedule_item_title_example));
-            exampleEvent2.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
-            exampleEvent2.setOnTheSameDayAsEventAbove(exampleEvent1.getDate().equals(exampleEvent2.getDate()));
-
-            CalendarEvent exampleEvent3 = new CalendarEvent(LocalDate.now());
-            exampleEvent3.setEventName("Different Meeting");
-            exampleEvent3.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
-            exampleEvent3.setOnTheSameDayAsEventAbove(exampleEvent2.getDate().equals(exampleEvent3.getDate()));
-
-            CalendarEvent exampleEvent4 = new CalendarEvent(LocalDate.now().plusDays(1));
-            exampleEvent4.setEventName("Different Meeting");
-            exampleEvent4.setTimespan(context.getResources().getString(R.string.schedule_item_timespan_example));
-            exampleEvent4.setOnTheSameDayAsEventAbove(exampleEvent3.getDate().equals(exampleEvent4.getDate()));
-
             data = new ArrayList<>();
-            data.add(exampleEvent1);
-            data.add(exampleEvent2);
-            data.add(exampleEvent3);
-            data.add(exampleEvent4);
+            loadDataFromDatabase();
         }
 
         @Override
@@ -110,12 +102,117 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             CalendarEvent event = data.get(position);
 
             if (event.isOnTheSameDayAsEventAbove()) {
-                remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
+//                remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
                 int padding = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
                 remoteViews.setViewPadding(R.id.calendar_item_parent_layout, padding, 0, padding, padding);
             }
 
             return remoteViews;
+        }
+
+        public void loadDataFromDatabase() {
+            try {
+                Cursor scheduleCursor = new ScheduleDatabaseHelper(context).readAllData();
+                if (scheduleCursor.getCount() == 0) {
+                    Log.e("DATABASE ERROR", "Schedule Cursor has no Items");
+                    return;
+                }
+
+                while (scheduleCursor.moveToNext()) {
+                    ScheduleEntry entry = new ScheduleEntry(Integer.parseInt(scheduleCursor.getString(0)), scheduleCursor.getString(1), scheduleCursor.getString(2));
+                    parseHTML(entry);
+                }
+
+            } catch (Exception e) {
+                Log.e("DATABASE ERROR", e.getMessage());
+            }
+        }
+
+        public void parseHTML(ScheduleEntry entry) {
+            //TODO: Integrate with the database and settings
+            boolean containsDayOfWeek = true;
+            String timespanSplitter = "-";
+
+            String html = entry.getScheduleHTML();
+            Document document = Jsoup.parse(html);
+            Elements tables = document.getElementsByTag("table");
+
+            for (Element table : tables) {
+                Elements trs = table.getElementsByTag("tr");
+                rowNumber = 0;
+                timespans = new ArrayList<>();
+                calendarEvents = new ArrayList<>();
+
+                loopRows(trs);
+
+                renderData();
+                Log.d("Custom Logging", "-------------------------");
+            }
+        }
+
+        private void renderData() {
+            CalendarEvent previousEvent = null;
+            for (CalendarEvent event : calendarEvents) {
+//                        Log.d("Custom Logging", "name: " + event.getEventName());
+//                        Log.d("Custom Logging", "timespan: " + event.getTimespan());
+//                        Log.d("Custom Logging", "day: " + event.getFormattedDay());
+//                        Log.d("Custom Logging", "month: " + event.getFormattedMonth());
+
+                if (previousEvent == null) {
+                    event.setOnTheSameDayAsEventAbove(false);
+                    data.add(event);
+                } else if (event.getDate() != null){
+                    event.setOnTheSameDayAsEventAbove(previousEvent.getDate().equals(event.getDate()));
+                    data.add(event);
+                }
+
+                previousEvent = event;
+            }
+        }
+
+        private void loopRows(Elements trs) {
+            for (Element tr : trs) {
+                rowNumber += 1;
+                Elements tds = tr.children();
+
+                columnNumber = 0;
+                itemsIteration = 0;
+                rowDate = null;
+                date = null;
+
+                loopRowItems(tds, rowNumber);
+            }
+        }
+
+        public void loopRowItems(Elements tds, int rowNumber) {
+            for (Element td : tds) {
+                if (td.html().startsWith("<input") || td.html().equals("&nbsp;")) continue;
+
+                if (rowNumber == 1) {
+                    timespans.add(td.html());
+                }
+
+                if (columnNumber == 0 && !td.ownText().isEmpty() && rowNumber > 1) {
+                    rowDate = td.ownText();
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
+                        date = LocalDate.parse(rowDate, formatter);
+                    } catch (Exception e) {
+                        Log.e("ERROR", e.getMessage());
+                    }
+                }
+
+                if (rowNumber > 1 && columnNumber < timespans.size() && columnNumber != 0 && columnNumber != 1) {
+                    CalendarEvent event = new CalendarEvent(date);
+                    event.setEventName(td.html());
+                    event.setTimespan(Objects.requireNonNull(timespans.get(itemsIteration)));
+                    calendarEvents.add(event);
+                    Log.d("Custom Logging", itemsIteration + " ");
+                    itemsIteration++;
+                }
+
+                columnNumber += 1;
+            }
         }
     }
 }

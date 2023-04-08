@@ -1,5 +1,7 @@
 package lukas.sobotik.widgetschedule;
 
+import android.util.Log;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -23,10 +25,20 @@ public class CalendarEvent {
         return date.getDayOfWeek().toString();
     }
     public String getFormattedDay() {
-        return date.format(DateTimeFormatter.ofPattern("d"));
+        try {
+            return date.format(DateTimeFormatter.ofPattern("d"));
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage());
+            return "";
+        }
     }
     public String getFormattedMonth() {
-        return date.format(DateTimeFormatter.ofPattern("MMM"));
+        try {
+            return date.format(DateTimeFormatter.ofPattern("MMM"));
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage());
+            return "";
+        }
     }
     public String getTimespan() {
         return timespan;
