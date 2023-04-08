@@ -60,7 +60,9 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-
+            Log.d("Custom Logging", "Updating...");
+            data = new ArrayList<>();
+            loadDataFromDatabase();
         }
 
         @Override
@@ -185,7 +187,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
                     }
                 }
 
-                if (rowNumber > 1 && columnNumber != 0 && columnNumber != 1) {
+                if (rowNumber > 1 && columnNumber != 0 && (containsDayOfWeek && columnNumber != 1)) {
                     CalendarEvent event = new CalendarEvent(date);
                     event.setEventName(td.html());
                     event.setTimespan(Objects.requireNonNull(timespans.get(itemsIteration)));
