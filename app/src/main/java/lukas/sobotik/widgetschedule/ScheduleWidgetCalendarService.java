@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 import org.jsoup.Jsoup;
@@ -73,7 +74,17 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             remoteViews.setTextViewText(R.id.schedule_item_title, data.get(position).getEventName());
             remoteViews.setTextViewText(R.id.schedule_item_timespan, data.get(position).getTimespan());
 
-            remoteViews = groupSimilarEvents(remoteViews, position);
+            //Group items on the same day
+            CalendarEvent event = data.get(position);
+            Log.d("Custom Logging", event.getEventName() + " - " + event.isOnTheSameDayAsEventAbove());
+            int padding8dp = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
+            if (event.isOnTheSameDayAsEventAbove()) {
+                remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
+                remoteViews.setViewPadding(R.id.calendar_item_parent_layout, padding8dp, 0, padding8dp, padding8dp);
+            } else {
+                remoteViews.setViewVisibility(R.id.schedule_date_layout, View.VISIBLE);
+                remoteViews.setViewPadding(R.id.calendar_item_parent_layout, padding8dp, padding8dp, padding8dp, padding8dp);
+            }
 
             return remoteViews;
         }
@@ -96,18 +107,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return false;
-        }
-
-        public RemoteViews groupSimilarEvents(RemoteViews remoteViews, int position) {
-            CalendarEvent event = data.get(position);
-
-            if (event.isOnTheSameDayAsEventAbove()) {
-//                remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
-                int padding = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
-                remoteViews.setViewPadding(R.id.calendar_item_parent_layout, padding, 0, padding, padding);
-            }
-
-            return remoteViews;
         }
 
         public void loadDataFromDatabase() {
@@ -150,26 +149,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             }
         }
 
-        private void renderData() {
-            CalendarEvent previousEvent = null;
-            for (CalendarEvent event : calendarEvents) {
-//                        Log.d("Custom Logging", "name: " + event.getEventName());
-//                        Log.d("Custom Logging", "timespan: " + event.getTimespan());
-//                        Log.d("Custom Logging", "day: " + event.getFormattedDay());
-//                        Log.d("Custom Logging", "month: " + event.getFormattedMonth());
-
-                if (previousEvent == null) {
-                    event.setOnTheSameDayAsEventAbove(false);
-                    data.add(event);
-                } else if (event.getDate() != null){
-                    event.setOnTheSameDayAsEventAbove(previousEvent.getDate().equals(event.getDate()));
-                    data.add(event);
-                }
-
-                previousEvent = event;
-            }
-        }
-
         private void loopRows(Elements trs) {
             for (Element tr : trs) {
                 rowNumber += 1;
@@ -202,16 +181,32 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
                     }
                 }
 
-                if (rowNumber > 1 && columnNumber < timespans.size() && columnNumber != 0 && columnNumber != 1) {
+                if (rowNumber > 1 && columnNumber != 0 && columnNumber != 1) {
                     CalendarEvent event = new CalendarEvent(date);
                     event.setEventName(td.html());
                     event.setTimespan(Objects.requireNonNull(timespans.get(itemsIteration)));
                     calendarEvents.add(event);
-                    Log.d("Custom Logging", itemsIteration + " ");
                     itemsIteration++;
                 }
 
                 columnNumber += 1;
+            }
+        }
+
+        private void renderData() {
+            CalendarEvent previousEvent = null;
+            for (CalendarEvent event : calendarEvents) {
+                if (previousEvent == null) {
+                    event.setOnTheSameDayAsEventAbove(false);
+                    event.setTimespan(event.getTimespan() + " - " + event.isOnTheSameDayAsEventAbove());
+                    data.add(event);
+                } else if (event.getDate() != null){
+                    event.setOnTheSameDayAsEventAbove(previousEvent.getDate().equals(event.getDate()));
+                    event.setTimespan(event.getTimespan() + " - " + event.isOnTheSameDayAsEventAbove());
+                    data.add(event);
+                }
+
+                previousEvent = event;
             }
         }
     }
