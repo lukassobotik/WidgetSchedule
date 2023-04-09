@@ -42,7 +42,6 @@ public class SettingsDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_ID, entry.getId());
         cv.put(COLUMN_NAME, String.valueOf(entry.getSettingName()));
         cv.put(COLUMN_VALUE, entry.getValue());
 
@@ -68,7 +67,6 @@ public class SettingsDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_ID, entry.getId());
         cv.put(COLUMN_NAME, String.valueOf(entry.getSettingName()));
         cv.put(COLUMN_VALUE, entry.getValue());
 

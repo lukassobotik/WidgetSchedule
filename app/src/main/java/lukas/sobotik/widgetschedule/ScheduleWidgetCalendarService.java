@@ -31,8 +31,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         private Context context;
         private int appWidgetId;
         private List<CalendarEvent> data;
-
-        //TODO: Integrate with the database and settings
         boolean containsDayOfWeek = true;
         boolean removeEmptyItems = true;
         boolean doNotShowLastTable = true;
@@ -118,6 +116,25 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         public void loadDataFromDatabase() {
             try {
+                Cursor settingsCursor = new SettingsDatabaseHelper(context).readAllData();
+                if (settingsCursor.getCount() == 0) {
+                    return;
+                }
+
+                while (settingsCursor.moveToNext()) {
+                    if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ScheduleURL))) {
+                    } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ContainsDayOfWeek))) {
+                        containsDayOfWeek = Boolean.parseBoolean(settingsCursor.getString(1));
+                        Log.d("Custom Logging", containsDayOfWeek + " weekday ");
+                    } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().RemoveEmptyItems))) {
+                        removeEmptyItems = Boolean.parseBoolean(settingsCursor.getString(1));
+                        Log.d("Custom Logging", removeEmptyItems + " remove ");
+                    } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().HideLastTable))) {
+                        doNotShowLastTable = Boolean.parseBoolean(settingsCursor.getString(1));
+                        Log.d("Custom Logging", doNotShowLastTable + " hide ");
+                    }
+                }
+
                 Cursor scheduleCursor = new ScheduleDatabaseHelper(context).readAllData();
                 if (scheduleCursor.getCount() == 0) {
                     Log.e("DATABASE ERROR", "Schedule Cursor has no Items");

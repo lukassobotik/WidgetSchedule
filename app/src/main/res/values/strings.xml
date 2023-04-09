@@ -8,4 +8,10 @@
     <string name="schedule_item_timespan_example">9am-9:45am</string>
     <string name="schedule_date_example">Wed</string>
     <string name="schedule_day_example">1</string>
+    <string name="contains_day_of_week_description">Check this if Your table contains weekdays on the second column</string>
+    <string name="contains_day_of_week">Contains Day Of Week</string>
+    <string name="remove_empty_items">Remove Empty Items</string>
+    <string name="remove_empty_item_description">Check this if you want to ignore empty items like \'-\' or empty spaces</string>
+    <string name="do_not_show_the_last_table">Do not show the Last Table</string>
+    <string name="do_not_show_the_last_table_description">This ignores the last table on the Website</string>
 </resources>

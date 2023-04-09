@@ -7,13 +7,13 @@ public class SettingsEntry {
     private int settingName;
     private String value;
 
-    public SettingsEntry(int id, @NonNull int settingName, @NonNull String value) {
+    public SettingsEntry(int settingName, @NonNull String value, int id) {
         this.id = id;
         this.settingName = settingName;
         this.value = value;
     }
 
-    public SettingsEntry(@NonNull int settingName, @NonNull String value) {
+    public SettingsEntry(int settingName, @NonNull String value) {
         this.settingName = settingName;
         this.value = value;
     }
