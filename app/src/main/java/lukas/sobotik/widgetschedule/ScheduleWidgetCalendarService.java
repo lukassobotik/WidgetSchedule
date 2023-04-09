@@ -36,7 +36,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         boolean containsDayOfWeek = true;
         boolean removeEmptyItems = true;
         boolean doNotShowLastTable = true;
-        String timespanSplitter = "-";
 
         // HTML Data Parsing
         int columnNumber;
@@ -83,7 +82,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             remoteViews.setTextViewText(R.id.schedule_item_title, data.get(position).getEventName());
             remoteViews.setTextViewText(R.id.schedule_item_timespan, data.get(position).getTimespan());
 
-            //Group items on the same day
+            // Group items on the same day
             CalendarEvent event = data.get(position);
             int padding8dp = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
             if (event.isOnTheSameDayAsEventAbove()) {
