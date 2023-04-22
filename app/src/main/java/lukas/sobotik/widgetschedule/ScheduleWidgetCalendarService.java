@@ -31,9 +31,9 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         private Context context;
         private int appWidgetId;
         private List<CalendarEvent> data;
-        boolean containsDayOfWeek = true;
-        boolean removeEmptyItems = true;
-        boolean doNotShowLastTable = true;
+        static boolean containsDayOfWeek = true;
+        static boolean removeEmptyItems = true;
+        static boolean doNotShowLastTable = true;
 
         // HTML Data Parsing
         int columnNumber;
@@ -118,20 +118,17 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             try {
                 Cursor settingsCursor = new SettingsDatabaseHelper(context).readAllData();
                 if (settingsCursor.getCount() == 0) {
+                    Log.e("DATABASE ERROR", "Settings Cursor has no Items");
                     return;
                 }
 
                 while (settingsCursor.moveToNext()) {
-                    if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ScheduleURL))) {
-                    } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ContainsDayOfWeek))) {
-                        containsDayOfWeek = Boolean.parseBoolean(settingsCursor.getString(1));
-                        Log.d("Custom Logging", containsDayOfWeek + " weekday ");
+                    if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ContainsDayOfWeek))) {
+                        containsDayOfWeek = Boolean.parseBoolean(settingsCursor.getString(2));
                     } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().RemoveEmptyItems))) {
-                        removeEmptyItems = Boolean.parseBoolean(settingsCursor.getString(1));
-                        Log.d("Custom Logging", removeEmptyItems + " remove ");
+                        removeEmptyItems = Boolean.parseBoolean(settingsCursor.getString(2));
                     } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().HideLastTable))) {
-                        doNotShowLastTable = Boolean.parseBoolean(settingsCursor.getString(1));
-                        Log.d("Custom Logging", doNotShowLastTable + " hide ");
+                        doNotShowLastTable = Boolean.parseBoolean(settingsCursor.getString(2));
                     }
                 }
 
