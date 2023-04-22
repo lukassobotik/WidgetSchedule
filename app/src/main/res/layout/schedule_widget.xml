@@ -1,10 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                style="@style/Widget.WidgetSchedule.AppWidget.Container"
-                android:theme="@style/Theme.WidgetSchedule.AppWidgetContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="-16dp">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              style="@style/Widget.WidgetSchedule.AppWidget.Container"
+              android:theme="@style/Theme.WidgetSchedule.AppWidgetContainer"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="-16dp">
     <LinearLayout 
             android:layout_width="match_parent" 
             android:layout_height="wrap_content"
@@ -14,7 +15,7 @@
             >
         <TextView
                 android:id="@+id/widget_header"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="Schedule"
@@ -23,19 +24,22 @@
                 android:textSize="16sp"
                 android:padding="16dp"
                 android:layout_weight="1"/>
-        <Button
+
+        <ImageButton
                 android:id="@+id/widget_refresh_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Refresh"
+                android:layout_height="match_parent"
+                android:layout_weight="0.075"
+                android:src="@drawable/round_refresh"
+                android:layout_margin="2dp"
                 android:textColor="@color/white"
-                />
+                android:backgroundTint="@android:color/transparent"
+                android:background="@drawable/circle" />
     </LinearLayout>
     <ListView
             android:id="@+id/calendar_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="16dp"
             android:divider="@null"
             android:dividerHeight="0dp"
             android:listSelector="@android:color/transparent" />
