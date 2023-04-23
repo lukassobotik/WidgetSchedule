@@ -41,6 +41,9 @@
                     android:name="android.app.lib_name"
                     android:value=""/>
         </activity>
+        
+        <activity android:name=".ScheduleWidget$BottomSheetActivity"
+                />
 
         <service android:name=".ScheduleWidgetCalendarService" android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
