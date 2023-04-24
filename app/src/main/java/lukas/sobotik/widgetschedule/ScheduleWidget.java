@@ -26,22 +26,21 @@ public class ScheduleWidget extends AppWidgetProvider {
     public static final String ACTION_REFRESH = "actionRefresh";
     private static final String ACTION_SHOW_BOTTOM_SHEET = "com.example.widget.SHOW_BOTTOM_SHEET";
     public static int widgetId = 0;
-    private static ListPopupWindow popupWindow;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.schedule_widget);
 
+        // Set the ListWidgetService intent to act as the adapter for the ListView
         views.setRemoteAdapter(R.id.calendar_listview, new Intent(context, ScheduleWidgetCalendarService.class));
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.calendar_listview);
 
+        // Refresh Button Click Listening
         Intent refreshIntent = new Intent(context, ScheduleWidget.class);
         refreshIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { appWidgetId });
-
         refreshIntent.setAction(ACTION_REFRESH);
-
         PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_refresh_button, refreshPendingIntent);
         views.setPendingIntentTemplate(R.id.widget_refresh_button, refreshPendingIntent);
@@ -54,13 +53,11 @@ public class ScheduleWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, popupIntent, 0);
         views.setOnClickPendingIntent(R.id.widget_header, pendingIntent);
 
-        // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.schedule_widget);
             appWidgetManager.updateAppWidget(appWidgetId, null);

@@ -76,7 +76,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         public RemoteViews getViewAt(int position) {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.calendar_item);
             remoteViews.setTextViewText(R.id.schedule_day, data.get(position).getFormattedDay());
-            remoteViews.setTextViewText(R.id.schedule_date, data.get(position).getFormattedMonth());
+            remoteViews.setTextViewText(R.id.schedule_date, data.get(position).getFormattedWeekDay());
             remoteViews.setTextViewText(R.id.schedule_item_title, data.get(position).getEventName());
             remoteViews.setTextViewText(R.id.schedule_item_timespan, data.get(position).getTimespan());
 

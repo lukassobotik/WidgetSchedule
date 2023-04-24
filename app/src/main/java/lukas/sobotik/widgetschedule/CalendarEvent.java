@@ -40,6 +40,14 @@ public class CalendarEvent {
             return "";
         }
     }
+    public String getFormattedWeekDay() {
+        try {
+            return date.format(DateTimeFormatter.ofPattern("EEE"));
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage());
+            return "";
+        }
+    }
     public String getTimespan() {
         return timespan;
     }
