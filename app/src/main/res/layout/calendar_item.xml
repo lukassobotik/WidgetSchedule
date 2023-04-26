@@ -9,12 +9,14 @@
             android:id="@+id/calendar_item_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="0dp">
+            android:paddingTop="0dp"
+            android:baselineAligned="false">
 
         <RelativeLayout
                 android:id="@+id/schedule_date_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.2"
                 android:padding="8dp"
                 android:gravity="center">
             <TextView
