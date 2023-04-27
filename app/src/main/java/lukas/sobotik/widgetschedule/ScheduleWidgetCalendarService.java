@@ -31,6 +31,8 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         private Context context;
         private int appWidgetId;
         private List<CalendarEvent> data;
+
+        // Database
         static boolean containsDayOfWeek = true;
         static boolean removeEmptyItems = true;
         static boolean doNotShowLastTable = true;

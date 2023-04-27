@@ -48,6 +48,14 @@ public class CalendarEvent {
             return "";
         }
     }
+    public String getShortFormattedWeekDay() {
+        try {
+            return date.format(DateTimeFormatter.ofPattern("EEE")).substring(0, 1);
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage());
+            return "";
+        }
+    }
     public String getTimespan() {
         return timespan;
     }

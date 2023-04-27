@@ -7,7 +7,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.textfield.TextInputLayout;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Button saveButton;
     LinearLayout containsWeekDayLayout, removeEmptyItemsLayout, hideLastTableLayout;
     MaterialSwitch containsWeekDaySwitch, removeEmptyItemsSwitch, hideLastTableSwitch;
+    BottomNavigationView bottomNavigationView;
 
     SettingsDatabaseHelper settingsDatabaseHelper;
     ScheduleDatabaseHelper scheduleDatabaseHelper;
@@ -66,6 +69,17 @@ public class MainActivity extends AppCompatActivity {
         hideLastTableLayout.setOnClickListener(view -> {
             hideLastTableSwitch.setChecked(!hideLastTableSwitch.isChecked());
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().HideLastTable, String.valueOf(hideLastTableSwitch.isChecked())));
+        });
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.bottom_navigation_settings) {
+                Log.d("Custom Logging", "Settings");
+                return true;
+            } else if (item.getItemId() == R.id.bottom_navigation_schedule) {
+                Log.d("Custom Logging", "Schedule");
+                return true;
+            }
+            return false;
         });
     }
 
@@ -151,5 +165,6 @@ public class MainActivity extends AppCompatActivity {
         removeEmptyItemsSwitch = findViewById(R.id.remove_empty_items_switch);
         hideLastTableLayout = findViewById(R.id.hide_last_table_layout);
         hideLastTableSwitch = findViewById(R.id.hide_last_table_switch);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
     }
 }

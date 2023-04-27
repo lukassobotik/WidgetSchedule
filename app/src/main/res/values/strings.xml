@@ -14,4 +14,6 @@
     <string name="remove_empty_item_description">Check this if you want to ignore empty items like \'-\' or empty spaces</string>
     <string name="do_not_show_the_last_table">Do not show the Last Table</string>
     <string name="do_not_show_the_last_table_description">This ignores the last table on the Website</string>
+    <string name="widget_settings">Widget Settings</string>
+    <string name="schedule">Schedule</string>
 </resources>
