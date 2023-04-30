@@ -6,30 +6,27 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RemoteViews;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class ScheduleWidget extends AppWidgetProvider {
-    public static final String ACTION_REFRESH = "actionRefresh";
-    private static final String ACTION_SHOW_BOTTOM_SHEET = "com.example.widget.SHOW_BOTTOM_SHEET";
+    public static final String ACTION_REFRESH = "lukas.sobotik.WidgetSchedule.REFRESH";
+    private static final String ACTION_SHOW_BOTTOM_SHEET = "lukas.sobotik.WidgetSchedule.SHOW_BOTTOM_SHEET";
     public static int widgetId = 0;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {

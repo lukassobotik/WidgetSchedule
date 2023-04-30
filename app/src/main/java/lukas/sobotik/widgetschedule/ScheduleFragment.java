@@ -1,10 +1,19 @@
 package lukas.sobotik.widgetschedule;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +27,8 @@ public class ScheduleFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
+
+    List<ScheduleEntry> scheduleList;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -50,9 +61,46 @@ public class ScheduleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule, container, false);
+        View inflatedView = inflater.inflate(R.layout.fragment_schedule, container, false);
+
+        ListView listView = inflatedView.findViewById(R.id.schedule_list_view);
+
+        List<String> items = new ArrayList<>();
+        items.add("Hello");
+        items.add("There");
+        items.add("My");
+        items.add("Friend");
+
+        scheduleList = new ArrayList<>();
+        loadDataFromDatabase();
+
+        List<String> tableHTMLs = new ArrayList<>();
+        for (ScheduleEntry entry : scheduleList) {
+            Document document = Jsoup.parse(entry.getScheduleHTML());
+            Elements tables = document.getElementsByTag("table");
+
+            for (Element element : tables) {
+                tableHTMLs.add(element.outerHtml());
+            }
+        }
+
+        ScheduleAdapter adapter = new ScheduleAdapter(getActivity(), tableHTMLs);
+
+        listView.setAdapter(adapter);
+
+        return inflatedView;
+    }
+
+    private void loadDataFromDatabase() {
+        Cursor scheduleCursor = new ScheduleDatabaseHelper(getContext()).readAllData();
+        if (scheduleCursor.getCount() == 0) {
+            return;
+        }
+
+        while (scheduleCursor.moveToNext()) {
+            scheduleList.add(new ScheduleEntry(Integer.parseInt(scheduleCursor.getString(0)), scheduleCursor.getString(1), scheduleCursor.getString(2)));
+        }
     }
 }
