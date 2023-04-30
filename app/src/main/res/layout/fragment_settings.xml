@@ -23,7 +23,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textUri" />
         </com.google.android.material.textfield.TextInputLayout>
-
         <LinearLayout
                 android:id="@+id/contains_day_of_week_layout"
                 android:layout_width="match_parent"
@@ -54,7 +53,6 @@
                         android:ellipsize="end" />
 
             </LinearLayout>
-
             <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/contains_day_of_week_switch"
                     android:layout_width="0dp"
@@ -64,7 +62,6 @@
                     />
 
         </LinearLayout>
-
         <LinearLayout
                 android:id="@+id/remove_empty_items_layout"
                 android:layout_width="match_parent"
@@ -95,7 +92,6 @@
                         android:ellipsize="end" />
 
             </LinearLayout>
-
             <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/remove_empty_items_switch"
                     android:layout_width="0dp"
@@ -105,7 +101,6 @@
                     />
 
         </LinearLayout>
-
         <LinearLayout
                 android:id="@+id/hide_last_table_layout"
                 android:layout_width="match_parent"
@@ -136,7 +131,6 @@
                         android:ellipsize="end" />
 
             </LinearLayout>
-
             <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/hide_last_table_switch"
                     android:layout_width="0dp"
@@ -146,25 +140,11 @@
                     />
 
         </LinearLayout>
-
-
         <com.google.android.material.button.MaterialButton
                 android:id="@+id/database_save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/save" />
-
-        <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <TextView
-                    android:id="@+id/schedule_html"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-        </ScrollView>
-
     </LinearLayout>
 
 </FrameLayout>

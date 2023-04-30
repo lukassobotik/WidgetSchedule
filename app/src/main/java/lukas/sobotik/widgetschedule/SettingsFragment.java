@@ -96,7 +96,7 @@ public class SettingsFragment extends Fragment {
         hideLastTableLayout = inflatedView.findViewById(R.id.hide_last_table_layout);
         hideLastTableSwitch = inflatedView.findViewById(R.id.hide_last_table_switch);
 
-        loadDataFromDatabase(inflatedView);
+        loadDataFromDatabase();
 
         saveButton.setOnClickListener(v -> {
             String scheduleLink = Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim();
@@ -128,7 +128,7 @@ public class SettingsFragment extends Fragment {
         return inflatedView;
     }
 
-    private void loadDataFromDatabase(View inflatedView) {
+    private void loadDataFromDatabase() {
         Cursor settingsCursor = settingsDatabaseHelper.readAllData();
         if (settingsCursor.getCount() == 0) {
             return;
@@ -171,9 +171,6 @@ public class SettingsFragment extends Fragment {
 
         while (scheduleCursor.moveToNext()) {
             scheduleList.add(new ScheduleEntry(Integer.parseInt(scheduleCursor.getString(0)), scheduleCursor.getString(1), scheduleCursor.getString(2)));
-
-            TextView textView = inflatedView.findViewById(R.id.schedule_html);
-            textView.setText(scheduleCursor.getString(2));
         }
     }
 

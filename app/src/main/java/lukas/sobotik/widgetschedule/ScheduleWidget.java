@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -15,9 +16,13 @@ import android.view.Window;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of App Widget functionality.
@@ -84,6 +89,11 @@ public class ScheduleWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
 
+            Intent refreshIntent = new Intent(context, RefreshActivity.class);
+            refreshIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            refreshIntent.setAction(ACTION_REFRESH);
+            context.startActivity(refreshIntent);
+
             if (appWidgetIds != null) {
                 for (int appWidgetId : appWidgetIds) {
                     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.schedule_widget);
@@ -93,13 +103,13 @@ public class ScheduleWidget extends AppWidgetProvider {
                 }
             }
         } else if (ACTION_SHOW_BOTTOM_SHEET.equals(intent.getAction())) {
-            Log.d("Custom Logging", "Bottom Sheet should be loaded now.");
             Intent bottomSheetIntent = new Intent(context, BottomSheetActivity.class);
             bottomSheetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             bottomSheetIntent.setAction(ACTION_SHOW_BOTTOM_SHEET);
             context.startActivity(bottomSheetIntent);
         }
     }
+
     @Override
     public IBinder peekService(Context myContext, Intent service) {
         return super.peekService(myContext, service);
@@ -126,12 +136,56 @@ public class ScheduleWidget extends AppWidgetProvider {
                     android.R.layout.simple_list_item_1, new String[]{"Item 1", "Item 2", "Item 3"}));
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 Log.d("Custom Logging", position + " ");
-                finish();
+                finishAffinity();
             });
 
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
             bottomSheetDialog.setContentView(bottomSheetView);
             bottomSheetDialog.show();
+        }
+    }
+
+    public static class RefreshActivity extends AppCompatActivity {
+        String scheduleURL = "";
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (getIntent().getAction().equals(ACTION_REFRESH)) {
+                loadDataFromDatabase();
+                fetchDataFromURL(scheduleURL);
+                finishAffinity();
+            }
+        }
+
+        public void loadDataFromDatabase() {
+            Cursor settingsCursor = new SettingsDatabaseHelper(this).readAllData();
+            if (settingsCursor.getCount() == 0) {
+                return;
+            }
+
+            while (settingsCursor.moveToNext()) {
+                if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ScheduleURL))) {
+                    scheduleURL = settingsCursor.getString(2);
+                }
+            }
+        }
+
+        public void fetchDataFromURL(String url) {
+            Thread thread = new Thread(() -> {
+                try  {
+                    Log.d("Custom Logging", "Fetching Data...");
+                    try {
+                        Document doc = Jsoup.connect(url).get();
+                        new ScheduleDatabaseHelper(this).addItem(new ScheduleEntry(url, doc.html()));
+                    } catch (IOException e) {
+                        Log.d("Custom Logging", "error " + e.getMessage());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            thread.start();
         }
     }
 }
