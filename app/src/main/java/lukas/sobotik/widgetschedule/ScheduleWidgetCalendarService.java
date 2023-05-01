@@ -37,15 +37,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         static boolean removeEmptyItems = true;
         static boolean doNotShowLastTable = true;
 
-        // HTML Data Parsing
-        int columnNumber;
-        int itemsIteration;
-        String rowDate;
-        LocalDate date;
-        List<String> timespans;
-        List<CalendarEvent> calendarEvents;
-        int rowNumber;
-
         ScheduleWidgetCalendarFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -142,92 +133,11 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
                 while (scheduleCursor.moveToNext()) {
                     ScheduleEntry entry = new ScheduleEntry(Integer.parseInt(scheduleCursor.getString(0)), scheduleCursor.getString(1), scheduleCursor.getString(2));
-                    parseHTML(entry);
+                    data = HTMLParser.parseSchedule(entry, containsDayOfWeek, removeEmptyItems, doNotShowLastTable);
                 }
 
             } catch (Exception e) {
                 Log.e("DATABASE ERROR", e.getMessage());
-            }
-        }
-
-        public void parseHTML(ScheduleEntry entry) {
-            String html = entry.getScheduleHTML();
-            Document document = Jsoup.parse(html);
-            Elements tables = document.getElementsByTag("table");
-
-            for (Element table : tables) {
-                if (doNotShowLastTable && table.html().equals(Objects.requireNonNull(tables.last()).html())) return;
-
-                Elements trs = table.getElementsByTag("tr");
-                rowNumber = 0;
-                timespans = new ArrayList<>();
-                calendarEvents = new ArrayList<>();
-
-                loopRows(trs);
-
-                renderData();
-                Log.d("Custom Logging", "-------------------------");
-            }
-        }
-
-        private void loopRows(Elements trs) {
-            for (Element tr : trs) {
-                rowNumber += 1;
-                Elements tds = tr.children();
-
-                columnNumber = 0;
-                itemsIteration = 0;
-                rowDate = null;
-                date = null;
-
-                loopRowItems(tds, rowNumber);
-            }
-        }
-
-        public void loopRowItems(Elements tds, int rowNumber) {
-            for (Element td : tds) {
-                if (td.html().startsWith("<input") || td.html().equals("&nbsp;")) continue;
-
-                if (rowNumber == 1) {
-                    timespans.add(td.html());
-                }
-
-                if (columnNumber == 0 && !td.ownText().isEmpty() && rowNumber > 1) {
-                    rowDate = td.ownText();
-                    try {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
-                        date = LocalDate.parse(rowDate, formatter);
-                    } catch (Exception e) {
-                        Log.e("ERROR", e.getMessage());
-                    }
-                }
-
-                if (rowNumber > 1 && columnNumber != 0 && (containsDayOfWeek && columnNumber != 1)) {
-                    CalendarEvent event = new CalendarEvent(date);
-                    event.setEventName(td.html());
-                    event.setTimespan(Objects.requireNonNull(timespans.get(itemsIteration)));
-                    calendarEvents.add(event);
-                    itemsIteration++;
-                }
-
-                columnNumber += 1;
-            }
-        }
-
-        private void renderData() {
-            CalendarEvent previousEvent = null;
-            for (CalendarEvent event : calendarEvents) {
-                if (removeEmptyItems && (event.getEventName().equals("-") || event.getEventName().equals(" "))) continue;
-
-                if (previousEvent == null) {
-                    event.setOnTheSameDayAsEventAbove(false);
-                    data.add(event);
-                } else if (event.getDate() != null){
-                    event.setOnTheSameDayAsEventAbove(previousEvent.getDate().equals(event.getDate()));
-                    data.add(event);
-                }
-
-                previousEvent = event;
             }
         }
     }
