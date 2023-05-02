@@ -1,7 +1,6 @@
 package lukas.sobotik.widgetschedule;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,7 @@ import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ScheduleAdapter extends BaseAdapter {
     private Context context;

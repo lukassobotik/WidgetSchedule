@@ -2,11 +2,11 @@ package lukas.sobotik.widgetschedule;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.ListView;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import androidx.fragment.app.Fragment;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
