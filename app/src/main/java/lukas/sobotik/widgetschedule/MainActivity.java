@@ -20,16 +20,20 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.schedule_fragment_container, settingsFragment);
+        transaction.add(R.id.schedule_fragment_container, scheduleFragment);
+        transaction.hide(scheduleFragment);
         transaction.commit();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             if (item.getItemId() == R.id.bottom_navigation_settings) {
-                fragmentTransaction.replace(R.id.schedule_fragment_container, settingsFragment);
+                fragmentTransaction.hide(scheduleFragment);
+                fragmentTransaction.show(settingsFragment);
                 fragmentTransaction.commit();
                 return true;
             } else if (item.getItemId() == R.id.bottom_navigation_schedule) {
-                fragmentTransaction.replace(R.id.schedule_fragment_container, scheduleFragment);
+                fragmentTransaction.hide(settingsFragment);
+                fragmentTransaction.show(scheduleFragment);
                 fragmentTransaction.commit();
                 return true;
             }
