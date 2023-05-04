@@ -33,7 +33,7 @@ public class SettingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    TextInputLayout scheduleURL;
+    TextInputLayout scheduleURL, itemColors;
     Button saveButton;
     LinearLayout containsWeekDayLayout, removeEmptyItemsLayout, hideLastTableLayout;
     MaterialSwitch containsWeekDaySwitch, removeEmptyItemsSwitch, hideLastTableSwitch;
@@ -93,20 +93,19 @@ public class SettingsFragment extends Fragment {
         removeEmptyItemsSwitch = inflatedView.findViewById(R.id.remove_empty_items_switch);
         hideLastTableLayout = inflatedView.findViewById(R.id.hide_last_table_layout);
         hideLastTableSwitch = inflatedView.findViewById(R.id.hide_last_table_switch);
+        itemColors = inflatedView.findViewById(R.id.color_text_input);
 
         loadDataFromDatabase();
 
         saveButton.setOnClickListener(v -> {
             String scheduleLink = Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim();
-
-            Log.d("Custom Logging", String.valueOf(containsWeekDaySwitch.isChecked()));
-            Log.d("Custom Logging", String.valueOf(removeEmptyItemsSwitch.isChecked()));
-            Log.d("Custom Logging", String.valueOf(hideLastTableSwitch.isChecked()));
+            String itemColorsSource = Objects.requireNonNull(itemColors.getEditText()).getText().toString().toLowerCase().trim();
 
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ScheduleURL, scheduleLink));
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ContainsDayOfWeek, String.valueOf(containsWeekDaySwitch.isChecked())));
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().RemoveEmptyItems, String.valueOf(removeEmptyItemsSwitch.isChecked())));
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().HideLastTable, String.valueOf(hideLastTableSwitch.isChecked())));
+            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ItemColors, itemColorsSource));
             fetchDataFromURL(scheduleLink);
         });
 
@@ -142,6 +141,8 @@ public class SettingsFragment extends Fragment {
                 settings = new Settings().RemoveEmptyItems;
             } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().HideLastTable))) {
                 settings = new Settings().HideLastTable;
+            } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ItemColors))) {
+                settings = new Settings().ItemColors;
             }
 
             settingsList.add(new SettingsEntry(settings, settingsCursor.getString(2), Integer.parseInt(settingsCursor.getString(0))));
@@ -159,6 +160,8 @@ public class SettingsFragment extends Fragment {
             } else if (String.valueOf(entry.getSettingName()).equals(String.valueOf(new Settings().HideLastTable))) {
                 boolean isChecked = entry.getValue().equals("true");
                 hideLastTableSwitch.setChecked(isChecked);
+            } else if (String.valueOf(entry.getSettingName()).equals(String.valueOf(new Settings().ItemColors))) {
+                Objects.requireNonNull(itemColors.getEditText()).setText(entry.getValue());
             }
         }
 

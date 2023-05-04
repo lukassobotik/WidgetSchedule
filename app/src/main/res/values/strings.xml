@@ -16,4 +16,5 @@
     <string name="do_not_show_the_last_table_description">This ignores the last table on the Website</string>
     <string name="widget_settings">Widget Settings</string>
     <string name="schedule">Schedule</string>
+    <string name="item_colors">Item colors</string>
 </resources>

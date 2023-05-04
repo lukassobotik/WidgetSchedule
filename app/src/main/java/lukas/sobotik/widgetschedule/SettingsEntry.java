@@ -6,7 +6,14 @@ public class SettingsEntry {
     private int id;
     private int settingName;
     private String value;
+    private String itemColors;
 
+    public SettingsEntry(int settingName, @NonNull String value, int id, String itemColors) {
+        this.id = id;
+        this.settingName = settingName;
+        this.value = value;
+        this.itemColors = itemColors;
+    }
     public SettingsEntry(int settingName, @NonNull String value, int id) {
         this.id = id;
         this.settingName = settingName;
@@ -17,7 +24,13 @@ public class SettingsEntry {
         this.settingName = settingName;
         this.value = value;
     }
+    public String getItemColors() {
+        return itemColors;
+    }
 
+    public void setItemColors(String itemColors) {
+        this.itemColors = itemColors;
+    }
     public int getId() {
         return id;
     }

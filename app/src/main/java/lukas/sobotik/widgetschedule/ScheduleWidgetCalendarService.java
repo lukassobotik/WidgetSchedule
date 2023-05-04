@@ -30,6 +30,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         static boolean containsDayOfWeek = true;
         static boolean removeEmptyItems = true;
         static boolean doNotShowLastTable = true;
+        static String itemColors = "";
 
         ScheduleWidgetCalendarFactory(Context context, Intent intent) {
             this.context = context;
@@ -116,6 +117,8 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
                         removeEmptyItems = Boolean.parseBoolean(settingsCursor.getString(2));
                     } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().HideLastTable))) {
                         doNotShowLastTable = Boolean.parseBoolean(settingsCursor.getString(2));
+                    } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ItemColors))) {
+                        itemColors = settingsCursor.getString(2);
                     }
                 }
 
