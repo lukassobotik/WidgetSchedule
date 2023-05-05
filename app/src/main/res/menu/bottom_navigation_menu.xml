@@ -6,6 +6,11 @@
             android:icon="@drawable/round_settings"
             android:title="@string/widget_settings"/>
     <item
+            android:id="@+id/bottom_navigation_colors"
+            android:enabled="true"
+            android:icon="@drawable/water_drop"
+            android:title="@string/item_colors"/>
+    <item
             android:id="@+id/bottom_navigation_schedule"
             android:enabled="true"
             android:icon="@drawable/round_calendar"

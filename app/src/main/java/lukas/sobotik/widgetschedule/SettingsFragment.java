@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputLayout;
@@ -33,7 +34,7 @@ public class SettingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    TextInputLayout scheduleURL, itemColors;
+    TextInputLayout scheduleURL;
     Button saveButton;
     LinearLayout containsWeekDayLayout, removeEmptyItemsLayout, hideLastTableLayout;
     MaterialSwitch containsWeekDaySwitch, removeEmptyItemsSwitch, hideLastTableSwitch;
@@ -93,19 +94,16 @@ public class SettingsFragment extends Fragment {
         removeEmptyItemsSwitch = inflatedView.findViewById(R.id.remove_empty_items_switch);
         hideLastTableLayout = inflatedView.findViewById(R.id.hide_last_table_layout);
         hideLastTableSwitch = inflatedView.findViewById(R.id.hide_last_table_switch);
-        itemColors = inflatedView.findViewById(R.id.color_text_input);
 
         loadDataFromDatabase();
 
         saveButton.setOnClickListener(v -> {
             String scheduleLink = Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim();
-            String itemColorsSource = Objects.requireNonNull(itemColors.getEditText()).getText().toString().toLowerCase().trim();
 
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ScheduleURL, scheduleLink));
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ContainsDayOfWeek, String.valueOf(containsWeekDaySwitch.isChecked())));
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().RemoveEmptyItems, String.valueOf(removeEmptyItemsSwitch.isChecked())));
             settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().HideLastTable, String.valueOf(hideLastTableSwitch.isChecked())));
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ItemColors, itemColorsSource));
             fetchDataFromURL(scheduleLink);
         });
 
@@ -160,8 +158,6 @@ public class SettingsFragment extends Fragment {
             } else if (String.valueOf(entry.getSettingName()).equals(String.valueOf(new Settings().HideLastTable))) {
                 boolean isChecked = entry.getValue().equals("true");
                 hideLastTableSwitch.setChecked(isChecked);
-            } else if (String.valueOf(entry.getSettingName()).equals(String.valueOf(new Settings().ItemColors))) {
-                Objects.requireNonNull(itemColors.getEditText()).setText(entry.getValue());
             }
         }
 

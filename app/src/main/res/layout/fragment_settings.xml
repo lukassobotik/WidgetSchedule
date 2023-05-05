@@ -2,159 +2,158 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
+             android:layout_height="wrap_content"
              tools:context=".SettingsFragment">
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/schedule_url_text_input"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/schedule_url"
-                android:layout_marginBottom="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
+                android:layout_height="0dp"
+                android:layout_weight="1">
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textUri" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <LinearLayout
-                android:id="@+id/contains_day_of_week_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
-
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical">
+                    android:padding="16dp">
 
-                <TextView
-                        android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/schedule_url_text_input"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:text="@string/contains_day_of_week"
-                        android:maxLines="1"
-                        android:ellipsize="end" />
+                        android:hint="@string/schedule_url"
+                        android:layout_marginBottom="16dp">
 
-                <TextView
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textUri" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <LinearLayout
+                        android:id="@+id/contains_day_of_week_layout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:text="@string/contains_day_of_week_description"
-                        android:ellipsize="end" />
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
 
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:text="@string/contains_day_of_week"
+                                android:maxLines="1"
+                                android:ellipsize="end" />
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:text="@string/contains_day_of_week_description"
+                                android:ellipsize="end" />
+
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/contains_day_of_week_switch"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            />
+
+                </LinearLayout>
+                <LinearLayout
+                        android:id="@+id/remove_empty_items_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:text="@string/remove_empty_items"
+                                android:maxLines="1"
+                                android:ellipsize="end" />
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:text="@string/remove_empty_item_description"
+                                android:ellipsize="end" />
+
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/remove_empty_items_switch"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            />
+
+                </LinearLayout>
+                <LinearLayout
+                        android:id="@+id/hide_last_table_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:text="@string/do_not_show_the_last_table"
+                                android:maxLines="1"
+                                android:ellipsize="end" />
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:text="@string/do_not_show_the_last_table_description"
+                                android:ellipsize="end" />
+
+                    </LinearLayout>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/hide_last_table_switch"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            />
+                </LinearLayout>
             </LinearLayout>
-            <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/contains_day_of_week_switch"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    />
-
-        </LinearLayout>
-        <LinearLayout
-                android:id="@+id/remove_empty_items_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
-
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:text="@string/remove_empty_items"
-                        android:maxLines="1"
-                        android:ellipsize="end" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:text="@string/remove_empty_item_description"
-                        android:ellipsize="end" />
-
-            </LinearLayout>
-            <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/remove_empty_items_switch"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    />
-
-        </LinearLayout>
-        <LinearLayout
-                android:id="@+id/hide_last_table_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
-
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:text="@string/do_not_show_the_last_table"
-                        android:maxLines="1"
-                        android:ellipsize="end" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:text="@string/do_not_show_the_last_table_description"
-                        android:ellipsize="end" />
-
-            </LinearLayout>
-            <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/hide_last_table_switch"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    />
-        </LinearLayout>
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/color_text_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/item_colors"
-                android:layout_marginBottom="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textUri" />
-        </com.google.android.material.textfield.TextInputLayout>
+        </ScrollView>
         <com.google.android.material.button.MaterialButton
                 android:id="@+id/database_save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/save" />
+                android:text="@string/save"
+                android:layout_margin="16dp" />
     </LinearLayout>
 </FrameLayout>
