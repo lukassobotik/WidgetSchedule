@@ -27,7 +27,7 @@ public class SettingsDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_NAME + " TEXT NOT NULL," +
+                COLUMN_NAME + " TEXT NOT NULL UNIQUE," +
                 COLUMN_VALUE + " TEXT NOT NULL);";
         db.execSQL(query);
     }
@@ -45,7 +45,7 @@ public class SettingsDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_NAME, String.valueOf(entry.getSettingName()));
         cv.put(COLUMN_VALUE, entry.getValue());
 
-        long result = db.insert(TABLE_NAME, null, cv);
+        long result = db.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
         if (result == -1) {
             try {
                 updateData(entry);
