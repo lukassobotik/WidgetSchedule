@@ -17,4 +17,7 @@
     <string name="widget_settings">Widget Settings</string>
     <string name="schedule">Schedule</string>
     <string name="item_colors">Item Colors</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+    <string name="item_color">Item Color</string>
 </resources>

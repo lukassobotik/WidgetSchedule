@@ -1,18 +1,20 @@
 package lukas.sobotik.widgetschedule;
 
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ListView;
-import androidx.fragment.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
+import androidx.fragment.app.Fragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +30,9 @@ public class ColorFragment extends Fragment {
     SettingsDatabaseHelper settingsDatabaseHelper;
     ListView itemColorListView;
     TextInputLayout itemColors;
-    Button saveButton;
+    Button saveButton, addColorButton;
+
+    List<String> list;
 
     private String mParam1;
     private String mParam2;
@@ -74,28 +78,46 @@ public class ColorFragment extends Fragment {
         itemColors = inflatedView.findViewById(R.id.color_text_input);
         itemColorListView = inflatedView.findViewById(R.id.color_list_view);
         saveButton = inflatedView.findViewById(R.id.color_database_save_button);
+        addColorButton = inflatedView.findViewById(R.id.color_add_button);
 
+        list = new ArrayList<>();
         loadDataFromDatabase();
-
-        List<String> list = new ArrayList<>();
-        list.add("a");
-        list.add("a");
-        list.add("a");
-        list.add("a");
-        list.add("a");
-        list.add("a");
-        list.add("a");
-        list.add("a");
-        list.add("a");
-        list.add("a");
 
         ItemColorAdapter colorAdapter = new ItemColorAdapter(getContext(), list);
         itemColorListView.setAdapter(colorAdapter);
 
-        saveButton.setOnClickListener(view -> {
-            String itemColorsSource = Objects.requireNonNull(itemColors.getEditText()).getText().toString().toLowerCase().trim();
+        itemColorListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Delete item?")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setNegativeButton("Cancel", (dialog, which) -> {
 
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ItemColors, itemColorsSource));
+                    })
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        list.remove(position);
+                        colorAdapter.notifyDataSetChanged();
+                    })
+                    .show();
+            return true;
+        });
+
+        addColorButton.setOnClickListener(view -> {
+            String itemColorsSource = Objects.requireNonNull(itemColors.getEditText()).getText().toString().toLowerCase().trim();
+            if (!itemColorsSource.isEmpty()) {
+                list.add(itemColorsSource);
+                colorAdapter.notifyDataSetChanged();
+                itemColors.getEditText().setText("");
+            }
+        });
+
+        saveButton.setOnClickListener(view -> {
+            StringBuilder builder = new StringBuilder();
+            for (String item : list) {
+                builder.append(item).append(";");
+            }
+            Log.d("Custom Logging", builder.toString());
+
+            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ItemColors, builder.toString()));
         });
 
         return inflatedView;
@@ -109,7 +131,11 @@ public class ColorFragment extends Fragment {
 
         while (settingsCursor.moveToNext()) {
             if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ItemColors))) {
-                Objects.requireNonNull(itemColors.getEditText()).setText(settingsCursor.getString(2));
+                String allItems = settingsCursor.getString(2);
+                String[] filteredArray = Arrays.stream(allItems.split(";"))
+                        .filter(item -> !item.isEmpty())
+                        .toArray(String[]::new);
+                Collections.addAll(list, filteredArray);
             }
         }
     }
