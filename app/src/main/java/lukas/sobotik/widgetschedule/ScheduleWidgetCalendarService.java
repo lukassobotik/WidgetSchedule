@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ScheduleWidgetCalendarService extends RemoteViewsService {
     @Override
@@ -25,6 +23,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         private Context context;
         private int appWidgetId;
         private List<CalendarEvent> data;
+        private List<String> colorList;
 
         // Database
         static boolean containsDayOfWeek = true;
@@ -40,6 +39,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         @Override
         public void onCreate() {
             data = new ArrayList<>();
+            colorList = new ArrayList<>();
             loadDataFromDatabase();
         }
 
@@ -77,6 +77,67 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             } else {
                 remoteViews.setViewVisibility(R.id.schedule_date_layout, View.VISIBLE);
                 remoteViews.setViewPadding(R.id.calendar_item_parent_layout, padding8dp, padding8dp, padding8dp, padding8dp);
+            }
+
+
+            // Set background color
+            for (String item : colorList) {
+                String[] parts = item.split("=");
+                if (parts[0].equalsIgnoreCase(data.get(position).getEventName())) {
+                    int drawableId = -1;
+                    switch (parts[1]) {
+                        case "red":
+                            drawableId = R.drawable.rounded_background_red;
+                            break;
+                        case "pink":
+                            drawableId = R.drawable.rounded_background_pink;
+                            break;
+                        case "orange":
+                            drawableId = R.drawable.rounded_background_orange;
+                            break;
+                        case "lime":
+                            drawableId = R.drawable.rounded_background_lime;
+                            break;
+                        case "green":
+                            drawableId = R.drawable.rounded_background_green;
+                            break;
+                        case "teal":
+                            drawableId = R.drawable.rounded_background_teal;
+                            break;
+                        case "cyan":
+                            drawableId = R.drawable.rounded_background_cyan;
+                            break;
+                        case "light_blue":
+                            drawableId = R.drawable.rounded_background_light_blue;
+                            break;
+                        case "blue":
+                            drawableId = R.drawable.rounded_background_blue;
+                            break;
+                        case "purple":
+                            drawableId = R.drawable.rounded_background_purple;
+                            break;
+                        case "indigo":
+                            drawableId = R.drawable.rounded_background_indigo;
+                            break;
+                        case "deep_pink":
+                            drawableId = R.drawable.rounded_background_deep_pink;
+                            break;
+                        case "coral":
+                            drawableId = R.drawable.rounded_background_coral;
+                            break;
+                        case "gold":
+                            drawableId = R.drawable.rounded_background_gold;
+                            break;
+                        case "silver":
+                            drawableId = R.drawable.rounded_background_silver;
+                            break;
+                        default:
+                            drawableId = R.drawable.rounded_background_yellow;
+                            break;
+                    }
+
+                    remoteViews.setInt(R.id.schedule_item, "setBackgroundResource", drawableId);
+                }
             }
 
             return remoteViews;
@@ -119,6 +180,11 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
                         doNotShowLastTable = Boolean.parseBoolean(settingsCursor.getString(2));
                     } else if (Objects.equals(settingsCursor.getString(1), String.valueOf(new Settings().ItemColors))) {
                         itemColors = settingsCursor.getString(2);
+                        String allItems = settingsCursor.getString(2);
+                        String[] filteredArray = Arrays.stream(allItems.split(";"))
+                                .filter(item -> !item.isEmpty())
+                                .toArray(String[]::new);
+                        Collections.addAll(colorList, filteredArray);
                     }
                 }
 

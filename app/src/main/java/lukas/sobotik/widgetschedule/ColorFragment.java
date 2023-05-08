@@ -104,7 +104,10 @@ public class ColorFragment extends Fragment {
         addColorButton.setOnClickListener(view -> {
             String itemColorsSource = Objects.requireNonNull(itemColors.getEditText()).getText().toString().toLowerCase().trim();
             if (!itemColorsSource.isEmpty()) {
-                list.add(itemColorsSource);
+                String[] filteredArray = Arrays.stream(itemColorsSource.split(";"))
+                        .filter(item -> !item.isEmpty())
+                        .toArray(String[]::new);
+                Collections.addAll(list, filteredArray);
                 colorAdapter.notifyDataSetChanged();
                 itemColors.getEditText().setText("");
             }

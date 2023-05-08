@@ -52,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_background"
-                android:backgroundTint="@color/yellow"
                 android:layout_marginStart="8dp"
                 android:padding="8dp">
             <TextView
