@@ -74,8 +74,15 @@ public class CalendarEvent {
     public void setOnTheSameDayAsEventAbove(boolean onTheSameDayAsEventAbove) {
         isOnTheSameDayAsEventAbove = onTheSameDayAsEventAbove;
     }
+    public int getDrawableId() {
+        return drawableId;
+    }
+    public void setDrawableId(int drawableId) {
+        this.drawableId = drawableId;
+    }
 
     private int id;
+    private int drawableId = -1;
     private LocalDate date;
     private String timespan;
     private String eventName;
