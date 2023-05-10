@@ -49,7 +49,6 @@ public class HTMLParser {
             loopRows(trs);
 
             renderData();
-            Log.d("Custom Logging", "-------------------------");
         }
 
         return data;

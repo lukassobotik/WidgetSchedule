@@ -84,7 +84,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             if (event.getDrawableId() > -1) {
                 remoteViews.setInt(R.id.schedule_item, "setBackgroundResource", event.getDrawableId());
             } else {
-                Log.d("Custom Logging", event.getDrawableId() + "  x  ");
                 remoteViews.setInt(R.id.schedule_item, "setBackgroundResource", R.drawable.rounded_background_pink);
             }
 

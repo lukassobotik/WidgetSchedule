@@ -117,11 +117,8 @@ public class ScheduleWidget extends AppWidgetProvider {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            Log.d("Custom Logging", "BottomSheetActivity Created.");
-
             if (getIntent().getAction().equals(ACTION_SHOW_BOTTOM_SHEET)) {
                 showBottomSheet();
-                Log.d("Custom Logging", "Showing Bottom Sheet...");
             }
         }
 
