@@ -26,6 +26,18 @@
                 android:layout_weight="1"/>
 
         <ImageButton
+                android:id="@+id/widget_current_items_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.075"
+                android:src="@drawable/round_calendar_today"
+                android:layout_margin="2dp"
+                android:textColor="@color/white"
+                android:backgroundTint="@android:color/transparent"
+                android:background="@drawable/circle"
+                android:contentDescription="@string/widget_current_items_button"/>
+
+        <ImageButton
                 android:id="@+id/widget_refresh_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -34,7 +46,8 @@
                 android:layout_margin="2dp"
                 android:textColor="@color/white"
                 android:backgroundTint="@android:color/transparent"
-                android:background="@drawable/circle" />
+                android:background="@drawable/circle"
+                android:contentDescription="@string/refresh_the_widget"/>
     </LinearLayout>
     <ListView
             android:id="@+id/calendar_listview"

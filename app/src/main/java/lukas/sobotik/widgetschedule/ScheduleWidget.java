@@ -19,13 +19,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class ScheduleWidget extends AppWidgetProvider {
     public static final String ACTION_REFRESH = "lukas.sobotik.WidgetSchedule.REFRESH";
+    public static final String ACTION_CURRENT_ITEMS = "lukas.sobotik.WidgetSchedule.CURRENT_ITEMS";
     private static final String ACTION_SHOW_BOTTOM_SHEET = "lukas.sobotik.WidgetSchedule.SHOW_BOTTOM_SHEET";
     public static int widgetId = 0;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -46,6 +51,14 @@ public class ScheduleWidget extends AppWidgetProvider {
         PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_refresh_button, refreshPendingIntent);
         views.setPendingIntentTemplate(R.id.widget_refresh_button, refreshPendingIntent);
+
+        Intent currentItemsIntent = new Intent(context, ScheduleWidget.class);
+        currentItemsIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        currentItemsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { appWidgetId });
+        currentItemsIntent.setAction(ACTION_CURRENT_ITEMS);
+        PendingIntent currentItemsPendingIntent = PendingIntent.getBroadcast(context, 0, currentItemsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.widget_current_items_button, currentItemsPendingIntent);
+        views.setPendingIntentTemplate(R.id.widget_current_items_button, currentItemsPendingIntent);
 
         widgetId = appWidgetId;
 
@@ -104,6 +117,25 @@ public class ScheduleWidget extends AppWidgetProvider {
             bottomSheetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             bottomSheetIntent.setAction(ACTION_SHOW_BOTTOM_SHEET);
             context.startActivity(bottomSheetIntent);
+        } else if (ACTION_CURRENT_ITEMS.equals(intent.getAction())) {
+            Log.d("Custom Logging", "Showing current items...");
+            List<CalendarEvent> list = new ArrayList<>();
+            list.add(new CalendarEvent(LocalDate.now()));
+
+            // Get a reference to the RemoteViewsService
+            ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory factory =
+                    new ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory(context.getApplicationContext(), intent);
+
+            // Update the data using the factory's updateData() method
+
+            Log.d("Custom Logging", factory.getData().stream().map(CalendarEvent::getEventName).collect(Collectors.toList()).toString());
+            factory.updateData(list);
+
+            int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+
+            // Notify the AppWidgetManager about the data change
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.calendar_listview);
         }
     }
 

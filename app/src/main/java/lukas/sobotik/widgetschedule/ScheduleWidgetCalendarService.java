@@ -22,7 +22,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         private Context context;
         private int appWidgetId;
-        private List<CalendarEvent> data;
+        private static List<CalendarEvent> data;
         private List<String> colorList;
 
         // Database
@@ -31,9 +31,21 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         static boolean doNotShowLastTable = true;
         static String itemColors = "";
 
+        static boolean ignoreDatasetChanged = false;
+
         ScheduleWidgetCalendarFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
+
+        public static void updateData(List<CalendarEvent> list) {
+            data = list;
+            ignoreDatasetChanged = true;
+            Log.d("Custom Logging", "Data updated");
+        }
+
+        public static List<CalendarEvent> getData() {
+            return data;
         }
 
         @Override
@@ -45,6 +57,10 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
+            if (ignoreDatasetChanged) {
+                ignoreDatasetChanged = false;
+                return;
+            }
             Log.d("Custom Logging", "Updating...");
             data = new ArrayList<>();
             loadDataFromDatabase();
