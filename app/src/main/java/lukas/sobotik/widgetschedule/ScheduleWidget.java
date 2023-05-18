@@ -20,9 +20,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -118,18 +116,14 @@ public class ScheduleWidget extends AppWidgetProvider {
             bottomSheetIntent.setAction(ACTION_SHOW_BOTTOM_SHEET);
             context.startActivity(bottomSheetIntent);
         } else if (ACTION_CURRENT_ITEMS.equals(intent.getAction())) {
-            Log.d("Custom Logging", "Showing current items...");
-            List<CalendarEvent> list = new ArrayList<>();
-            list.add(new CalendarEvent(LocalDate.now()));
-
             // Get a reference to the RemoteViewsService
             ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory factory =
                     new ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory(context.getApplicationContext(), intent);
 
-            // Update the data using the factory's updateData() method
+            boolean isShowingAllEvents = factory.swapData();
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.schedule_widget);
 
-            Log.d("Custom Logging", factory.getData().stream().map(CalendarEvent::getEventName).collect(Collectors.toList()).toString());
-            factory.updateData(list);
+
 
             int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
 

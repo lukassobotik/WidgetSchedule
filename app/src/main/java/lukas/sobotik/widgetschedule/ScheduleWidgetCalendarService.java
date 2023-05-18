@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ScheduleWidgetCalendarService extends RemoteViewsService {
     @Override
@@ -20,9 +25,10 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
     static class ScheduleWidgetCalendarFactory implements RemoteViewsFactory {
 
-        private Context context;
+        private final Context context;
         private int appWidgetId;
-        private static List<CalendarEvent> data;
+        private static List<CalendarEvent> allEvents;
+        private static List<CalendarEvent> currentEvents;
         private List<String> colorList;
 
         // Database
@@ -32,38 +38,55 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         static String itemColors = "";
 
         static boolean ignoreDatasetChanged = false;
+        static boolean isShowingAllEvents = true;
 
         ScheduleWidgetCalendarFactory(Context context, Intent intent) {
             this.context = context;
             this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
-        public static void updateData(List<CalendarEvent> list) {
-            data = list;
+        public static boolean swapData() {
+            List<CalendarEvent> temp = allEvents;
+            allEvents = currentEvents;
+            currentEvents = temp;
             ignoreDatasetChanged = true;
-            Log.d("Custom Logging", "Data updated");
-        }
-
-        public static List<CalendarEvent> getData() {
-            return data;
+            isShowingAllEvents = !isShowingAllEvents;
+            Log.d("Custom Logging", "Data swapped");
+            return isShowingAllEvents;
         }
 
         @Override
         public void onCreate() {
-            data = new ArrayList<>();
+            allEvents = new ArrayList<>();
+            currentEvents = new ArrayList<>();
             colorList = new ArrayList<>();
             loadDataFromDatabase();
         }
 
         @Override
         public void onDataSetChanged() {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> {
+                if (isShowingAllEvents) {
+                    Toast.makeText(context, "Showing All Events.", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(context, "Showing Only Current Events.", Toast.LENGTH_SHORT).show();
+
+                }
+            });
             if (ignoreDatasetChanged) {
                 ignoreDatasetChanged = false;
                 return;
             }
             Log.d("Custom Logging", "Updating...");
-            data = new ArrayList<>();
+            allEvents = new ArrayList<>();
             loadDataFromDatabase();
+
+            LocalDate currentDate = LocalDate.now();
+            currentEvents = allEvents.stream()
+                        .filter(event -> event.getDate().isEqual(currentDate) || event.getDate().isAfter(currentDate))
+                        .collect(Collectors.toList());
         }
 
         @Override
@@ -73,19 +96,19 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public int getCount() {
-            return data.size();
+            return allEvents.size();
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.calendar_item);
-            remoteViews.setTextViewText(R.id.schedule_day, data.get(position).getFormattedDay());
-            remoteViews.setTextViewText(R.id.schedule_date, data.get(position).getFormattedWeekDay());
-            remoteViews.setTextViewText(R.id.schedule_item_title, data.get(position).getEventName());
-            remoteViews.setTextViewText(R.id.schedule_item_timespan, data.get(position).getTimespan());
+            remoteViews.setTextViewText(R.id.schedule_day, allEvents.get(position).getFormattedDay());
+            remoteViews.setTextViewText(R.id.schedule_date, allEvents.get(position).getFormattedWeekDay());
+            remoteViews.setTextViewText(R.id.schedule_item_title, allEvents.get(position).getEventName());
+            remoteViews.setTextViewText(R.id.schedule_item_timespan, allEvents.get(position).getTimespan());
 
             // Group items on the same day
-            CalendarEvent event = data.get(position);
+            CalendarEvent event = allEvents.get(position);
             int padding8dp = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
             if (event.isOnTheSameDayAsEventAbove()) {
                 remoteViews.setViewVisibility(R.id.schedule_date_layout, View.INVISIBLE);
@@ -118,7 +141,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public long getItemId(int position) {
-            return data.get(position).getId();
+            return allEvents.get(position).getId();
         }
 
         @Override
@@ -159,7 +182,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
                 while (scheduleCursor.moveToNext()) {
                     ScheduleEntry entry = new ScheduleEntry(Integer.parseInt(scheduleCursor.getString(0)), scheduleCursor.getString(1), scheduleCursor.getString(2));
-                    data = HTMLParser.parseSchedule(entry, containsDayOfWeek, removeEmptyItems, doNotShowLastTable);
+                    allEvents = HTMLParser.parseSchedule(entry, containsDayOfWeek, removeEmptyItems, doNotShowLastTable);
                 }
 
                 Map<String, String> colorMap = new HashMap<>();
@@ -168,7 +191,7 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
                     colorMap.put(parts[0].toLowerCase(), parts[1]);
                 }
 
-                for (CalendarEvent event : data) {
+                for (CalendarEvent event : allEvents) {
                     String eventName = event.getEventName().toLowerCase();
                     if (colorMap.containsKey(eventName)) {
                         event.setDrawableId(getDrawableId(colorMap.get(eventName)));
