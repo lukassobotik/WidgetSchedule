@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               style="@style/Widget.WidgetSchedule.AppWidget.Container"
               android:theme="@style/Theme.WidgetSchedule.AppWidgetContainer"
               android:layout_width="match_parent"
@@ -25,12 +26,15 @@
                 android:padding="16dp"
                 android:layout_weight="1"/>
 
-        <ImageButton
+        <TextView
                 android:id="@+id/widget_current_items_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.075"
                 android:src="@drawable/round_calendar_today"
+                android:text="@string/all"
+                android:gravity="center"
+                android:textStyle="bold"
                 android:layout_margin="2dp"
                 android:textColor="@color/white"
                 android:backgroundTint="@android:color/transparent"

@@ -120,12 +120,9 @@ public class ScheduleWidget extends AppWidgetProvider {
             ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory factory =
                     new ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory(context.getApplicationContext(), intent);
 
-            boolean isShowingAllEvents = factory.swapData();
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.schedule_widget);
-
-
-
             int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+
+            factory.swapData(appWidgetIds, context);
 
             // Notify the AppWidgetManager about the data change
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

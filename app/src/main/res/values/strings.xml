@@ -22,4 +22,5 @@
     <string name="item_color">Item Color</string>
     <string name="refresh_the_widget">Refresh the Widget</string>
     <string name="widget_current_items_button">Change to all items or only upcoming items</string>
+    <string name="all">All</string>
 </resources>
