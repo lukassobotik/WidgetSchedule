@@ -46,7 +46,7 @@ public class ScheduleWidget extends AppWidgetProvider {
         refreshIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { appWidgetId });
         refreshIntent.setAction(ACTION_REFRESH);
-        PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_refresh_button, refreshPendingIntent);
         views.setPendingIntentTemplate(R.id.widget_refresh_button, refreshPendingIntent);
 
@@ -54,7 +54,7 @@ public class ScheduleWidget extends AppWidgetProvider {
         currentItemsIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         currentItemsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { appWidgetId });
         currentItemsIntent.setAction(ACTION_CURRENT_ITEMS);
-        PendingIntent currentItemsPendingIntent = PendingIntent.getBroadcast(context, 0, currentItemsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent currentItemsPendingIntent = PendingIntent.getBroadcast(context, 0, currentItemsIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_current_items_button, currentItemsPendingIntent);
         views.setPendingIntentTemplate(R.id.widget_current_items_button, currentItemsPendingIntent);
 
@@ -63,7 +63,7 @@ public class ScheduleWidget extends AppWidgetProvider {
         // Widget Header Click Listening
         Intent popupIntent = new Intent(context, ScheduleWidget.class);
         popupIntent.setAction(ACTION_SHOW_BOTTOM_SHEET);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, popupIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, popupIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_header, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
