@@ -51,15 +51,12 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
             allEvents = currentEvents;
             currentEvents = temp;
             ignoreDatasetChanged = true;
-            Log.d("Custom Logging", "Data swapped");
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.schedule_widget);
             if (isShowingAllEvents) {
                 views.setTextViewText(R.id.widget_current_items_button, "All");
-                Log.d("Custom Logging", "Showing upcoming events");
             } else {
                 views.setTextViewText(R.id.widget_current_items_button, "Upcoming");
-                Log.d("Custom Logging", "Showing all events");
             }
             for (int appWidgetId : appWidgetIds) {
                 AppWidgetManager.getInstance(context).partiallyUpdateAppWidget(appWidgetId, views);

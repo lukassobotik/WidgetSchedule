@@ -9,11 +9,11 @@
 </p>
 
 ### Overview
-The application aims to offer a convenient and customizable solution to users who require quick access to their schedules. The application enables schedules to be turned into an Android widget from a URL or URLs of links, which can be effortlessly accessed from the device's home screen.
+The application aims to offer a convenient and customizable solution to users who require quick access to their schedules. The application enables schedules to be turned into an Android widget from a URL, which can be effortlessly accessed from the device's home screen.
 
 One of the notable features of the application is the ability to change the color of certain events in the schedule, allowing users to identify and differentiate between different types of events easily. This feature makes managing schedules more convenient for users.
 
-In summary, a simple and efficient solution is provided by our application for users who need to access their schedules on the go, without requiring them to open a browser or navigate to a specific website.
+In summary, a simple and efficient solution is provided by the application for users who need to access their schedules on the go, without requiring them to open a browser or navigate to a specific website.
 
 ### License
 MIT License
