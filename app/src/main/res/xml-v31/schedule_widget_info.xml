@@ -8,5 +8,8 @@
                     android:description="@string/app_widget_description"
                     android:resizeMode="horizontal|vertical"
                     android:widgetCategory="home_screen"
+                    android:previewLayout="@layout/schedule_widget"
+                    android:targetCellHeight="4"
+                    android:targetCellWidth="3"
                     android:initialKeyguardLayout="@layout/schedule_widget"
         />
