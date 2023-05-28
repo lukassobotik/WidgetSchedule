@@ -73,16 +73,6 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(() -> {
-                if (isShowingAllEvents) {
-                    Toast.makeText(context, "Showing All Events.", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    Toast.makeText(context, "Showing Only Current Events.", Toast.LENGTH_SHORT).show();
-
-                }
-            });
             if (ignoreDatasetChanged) {
                 ignoreDatasetChanged = false;
                 return;
