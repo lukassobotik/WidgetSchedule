@@ -9,19 +9,13 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.RemoteViews;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of App Widget functionality.
@@ -29,7 +23,6 @@ import java.util.stream.Collectors;
 public class ScheduleWidget extends AppWidgetProvider {
     public static final String ACTION_REFRESH = "lukas.sobotik.WidgetSchedule.REFRESH";
     public static final String ACTION_CURRENT_ITEMS = "lukas.sobotik.WidgetSchedule.CURRENT_ITEMS";
-    private static final String ACTION_SHOW_BOTTOM_SHEET = "lukas.sobotik.WidgetSchedule.SHOW_BOTTOM_SHEET";
     public static int widgetId = 0;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -59,12 +52,6 @@ public class ScheduleWidget extends AppWidgetProvider {
         views.setPendingIntentTemplate(R.id.widget_current_items_button, currentItemsPendingIntent);
 
         widgetId = appWidgetId;
-
-        // Widget Header Click Listening
-        Intent popupIntent = new Intent(context, ScheduleWidget.class);
-        popupIntent.setAction(ACTION_SHOW_BOTTOM_SHEET);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, popupIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        views.setOnClickPendingIntent(R.id.widget_header, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -110,11 +97,6 @@ public class ScheduleWidget extends AppWidgetProvider {
                     updateAppWidget(context, appWidgetManager, appWidgetId);
                 }
             }
-        } else if (ACTION_SHOW_BOTTOM_SHEET.equals(intent.getAction())) {
-            Intent bottomSheetIntent = new Intent(context, BottomSheetActivity.class);
-            bottomSheetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            bottomSheetIntent.setAction(ACTION_SHOW_BOTTOM_SHEET);
-            context.startActivity(bottomSheetIntent);
         } else if (ACTION_CURRENT_ITEMS.equals(intent.getAction())) {
             // Get a reference to the RemoteViewsService
             ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory factory =
@@ -133,33 +115,6 @@ public class ScheduleWidget extends AppWidgetProvider {
     @Override
     public IBinder peekService(Context myContext, Intent service) {
         return super.peekService(myContext, service);
-    }
-
-    public static class BottomSheetActivity extends AppCompatActivity {
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            if (getIntent().getAction().equals(ACTION_SHOW_BOTTOM_SHEET)) {
-                showBottomSheet();
-            }
-        }
-
-        private void showBottomSheet() {
-            View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
-
-            ListView listView = bottomSheetView.findViewById(R.id.bottom_sheet_list_view);
-            listView.setAdapter(new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, new String[]{"Item 1", "Item 2", "Item 3"}));
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                Log.d("Custom Logging", position + " ");
-                finishAffinity();
-            });
-
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-            bottomSheetDialog.setContentView(bottomSheetView);
-            bottomSheetDialog.show();
-        }
     }
 
     public static class RefreshActivity extends AppCompatActivity {

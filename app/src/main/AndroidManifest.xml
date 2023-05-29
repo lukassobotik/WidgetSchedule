@@ -42,7 +42,6 @@
                     android:value=""/>
         </activity>
         
-        <activity android:name=".ScheduleWidget$BottomSheetActivity" />
         <activity android:name=".ScheduleWidget$RefreshActivity" />
 
         <service android:name=".ScheduleWidgetCalendarService" android:permission="android.permission.BIND_REMOTEVIEWS" />
