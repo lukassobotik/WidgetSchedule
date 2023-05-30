@@ -13,14 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemColorDrawableAdapter extends RecyclerView.Adapter<ItemColorDrawableVH> {
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
     private Context context;
     private List<Integer> data;
+
+    private OnItemClickListener listener;
+
+    public void setItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public ItemColorDrawableAdapter(Context context, List<Integer> data) {
         this.context = context;
         this.data = data;
     }
-
     @NotNull
     @Override
     public ItemColorDrawableVH onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
@@ -31,6 +40,12 @@ public class ItemColorDrawableAdapter extends RecyclerView.Adapter<ItemColorDraw
     @Override
     public void onBindViewHolder(@NotNull ItemColorDrawableVH holder, int position) {
         holder.itemColorDrawableView.setBackgroundResource(data.get(position));
+
+        holder.itemColorDrawableView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(position);
+            }
+        });
     }
 
     @Override

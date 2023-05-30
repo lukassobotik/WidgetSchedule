@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static lukas.sobotik.widgetschedule.DrawableParser.getDrawableId;
+
 public class ScheduleWidgetCalendarService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -189,67 +191,12 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
                 for (CalendarEvent event : allEvents) {
                     String eventName = event.getEventName().toLowerCase();
                     if (colorMap.containsKey(eventName)) {
-                        event.setDrawableId(getDrawableId(colorMap.get(eventName)));
+                        event.setDrawableId(getDrawableId(Objects.requireNonNull(colorMap.get(eventName))));
                     }
                 }
             } catch (Exception e) {
                 Log.e("DATABASE ERROR", e.getMessage());
             }
-        }
-
-        private int getDrawableId(String s) {
-            int drawableId = -1;
-            switch (s) {
-                case "red":
-                    drawableId = R.drawable.rounded_background_red;
-                    break;
-                case "pink":
-                    drawableId = R.drawable.rounded_background_pink;
-                    break;
-                case "orange":
-                    drawableId = R.drawable.rounded_background_orange;
-                    break;
-                case "lime":
-                    drawableId = R.drawable.rounded_background_lime;
-                    break;
-                case "green":
-                    drawableId = R.drawable.rounded_background_green;
-                    break;
-                case "teal":
-                    drawableId = R.drawable.rounded_background_teal;
-                    break;
-                case "cyan":
-                    drawableId = R.drawable.rounded_background_cyan;
-                    break;
-                case "light_blue":
-                    drawableId = R.drawable.rounded_background_light_blue;
-                    break;
-                case "blue":
-                    drawableId = R.drawable.rounded_background_blue;
-                    break;
-                case "purple":
-                    drawableId = R.drawable.rounded_background_purple;
-                    break;
-                case "indigo":
-                    drawableId = R.drawable.rounded_background_indigo;
-                    break;
-                case "deep_pink":
-                    drawableId = R.drawable.rounded_background_deep_pink;
-                    break;
-                case "coral":
-                    drawableId = R.drawable.rounded_background_coral;
-                    break;
-                case "gold":
-                    drawableId = R.drawable.rounded_background_gold;
-                    break;
-                case "silver":
-                    drawableId = R.drawable.rounded_background_silver;
-                    break;
-                case "yellow":
-                    drawableId = R.drawable.rounded_background_yellow;
-                    break;
-            }
-            return drawableId;
         }
     }
 }
