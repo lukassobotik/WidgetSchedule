@@ -2,6 +2,8 @@ package lukas.sobotik.widgetschedule;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +18,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +35,6 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     TextInputLayout scheduleURL;
-    Button saveButton;
     LinearLayout containsWeekDayLayout, removeEmptyItemsLayout, hideLastTableLayout;
     MaterialSwitch containsWeekDaySwitch, removeEmptyItemsSwitch, hideLastTableSwitch;
     SettingsDatabaseHelper settingsDatabaseHelper;
@@ -43,6 +42,8 @@ public class SettingsFragment extends Fragment {
     List<SettingsEntry> settingsList;
     List<ScheduleEntry> scheduleList;
     List<String> HTMLTables;
+
+    boolean isScheduleURLChanged = false;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -87,7 +88,6 @@ public class SettingsFragment extends Fragment {
         HTMLTables = new ArrayList<>();
 
         scheduleURL = inflatedView.findViewById(R.id.schedule_url_text_input);
-        saveButton = inflatedView.findViewById(R.id.database_save_button);
         containsWeekDayLayout = inflatedView.findViewById(R.id.contains_day_of_week_layout);
         containsWeekDaySwitch = inflatedView.findViewById(R.id.contains_day_of_week_switch);
         removeEmptyItemsLayout = inflatedView.findViewById(R.id.remove_empty_items_layout);
@@ -97,30 +97,74 @@ public class SettingsFragment extends Fragment {
 
         loadDataFromDatabase();
 
-        saveButton.setOnClickListener(v -> {
-            String scheduleLink = Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim();
-
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ScheduleURL, scheduleLink));
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ContainsDayOfWeek, String.valueOf(containsWeekDaySwitch.isChecked())));
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().RemoveEmptyItems, String.valueOf(removeEmptyItemsSwitch.isChecked())));
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().HideLastTable, String.valueOf(hideLastTableSwitch.isChecked())));
-            fetchDataFromURL(scheduleLink);
-        });
-
         containsWeekDayLayout.setOnClickListener(view -> {
             containsWeekDaySwitch.setChecked(!containsWeekDaySwitch.isChecked());
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ContainsDayOfWeek, String.valueOf(containsWeekDaySwitch.isChecked())));
+            saveDataToDatabase();
         });
+        containsWeekDaySwitch.setOnClickListener(view -> saveDataToDatabase());
         removeEmptyItemsLayout.setOnClickListener(view -> {
             removeEmptyItemsSwitch.setChecked(!removeEmptyItemsSwitch.isChecked());
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().RemoveEmptyItems, String.valueOf(removeEmptyItemsSwitch.isChecked())));
+            saveDataToDatabase();
         });
+        removeEmptyItemsSwitch.setOnClickListener(view -> saveDataToDatabase());
         hideLastTableLayout.setOnClickListener(view -> {
             hideLastTableSwitch.setChecked(!hideLastTableSwitch.isChecked());
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().HideLastTable, String.valueOf(hideLastTableSwitch.isChecked())));
+            saveDataToDatabase();
+        });
+        hideLastTableSwitch.setOnClickListener(view -> saveDataToDatabase());
+
+        Objects.requireNonNull(scheduleURL.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isScheduleURLChanged = true;
+                scheduleSaveOperation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         return inflatedView;
+    }
+
+    private void saveDataToDatabase() {
+        String scheduleLink = Objects.requireNonNull(scheduleURL.getEditText()).getText().toString().toLowerCase().trim();
+
+        settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ScheduleURL, scheduleLink));
+        settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ContainsDayOfWeek, String.valueOf(containsWeekDaySwitch.isChecked())));
+        settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().RemoveEmptyItems, String.valueOf(removeEmptyItemsSwitch.isChecked())));
+        settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().HideLastTable, String.valueOf(hideLastTableSwitch.isChecked())));
+        fetchDataFromURL(scheduleLink);
+
+        Log.d("Custom Logging", "Data saved to database");
+    }
+
+    TimerTask saveTask = new TimerTask() {
+        @Override
+        public void run() {
+            // Save the data to the database
+            saveDataToDatabase();
+        }
+    };
+
+    private void scheduleSaveOperation() {
+        Timer timer = new Timer();
+        if (saveTask != null) saveTask.cancel();
+        saveTask = new TimerTask() {
+            @Override
+            public void run() {
+                saveDataToDatabase();
+            }
+        };
+        timer.schedule(saveTask, 2000);
+        isScheduleURLChanged = false;
     }
 
     private void loadDataFromDatabase() {
