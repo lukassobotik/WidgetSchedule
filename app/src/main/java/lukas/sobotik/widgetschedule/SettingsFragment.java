@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -144,6 +145,7 @@ public class SettingsFragment extends Fragment {
         fetchDataFromURL(scheduleLink);
 
         Log.d("Custom Logging", "Data saved to database");
+        Snackbar.make(requireView(), "Saved", Snackbar.LENGTH_SHORT).show();
     }
 
     TimerTask saveTask = new TimerTask() {

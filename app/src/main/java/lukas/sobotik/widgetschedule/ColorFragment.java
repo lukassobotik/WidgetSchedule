@@ -1,6 +1,5 @@
 package lukas.sobotik.widgetschedule;
 
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.*;
@@ -86,9 +86,10 @@ public class ColorFragment extends Fragment {
         ItemColorAdapter.EditTextChangeListener editTextChangeListener = new ItemColorAdapter.EditTextChangeListener() {
             @Override
             public void onTextChanged(int position, String newText) {
-                // Handle the text change event
                 Log.d("Custom Logging", "onTextChanged: Position: " + position + ", Text: " + newText);
-                // Save the data to the database or perform any other necessary actions
+                list.set(position, newText);
+                Log.d("Custom Logging", "onTextChanged: List: " + list);
+                scheduleSaveOperation();
             }
         };
 
@@ -124,16 +125,41 @@ public class ColorFragment extends Fragment {
         });
 
         saveButton.setOnClickListener(view -> {
-            StringBuilder builder = new StringBuilder();
-            for (String item : list) {
-                builder.append(item).append(";");
-            }
-            Log.d("Custom Logging", builder.toString());
-
-            settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ItemColors, builder.toString()));
+            saveDataToDatabase();
         });
 
         return inflatedView;
+    }
+
+    private void saveDataToDatabase() {
+        StringBuilder builder = new StringBuilder();
+        for (String item : list) {
+            builder.append(item).append(";");
+        }
+        Log.d("Custom Logging", "Saving: " + builder);
+
+        settingsDatabaseHelper.addItem(new SettingsEntry(new Settings().ItemColors, builder.toString()));
+        Snackbar.make(requireView(), "Saved", Snackbar.LENGTH_SHORT).show();
+    }
+
+    TimerTask saveTask = new TimerTask() {
+        @Override
+        public void run() {
+            // Save the data to the database
+            saveDataToDatabase();
+        }
+    };
+
+    private void scheduleSaveOperation() {
+        Timer timer = new Timer();
+        if (saveTask != null) saveTask.cancel();
+        saveTask = new TimerTask() {
+            @Override
+            public void run() {
+                saveDataToDatabase();
+            }
+        };
+        timer.schedule(saveTask, 2000);
     }
 
     private void loadDataFromDatabase() {
