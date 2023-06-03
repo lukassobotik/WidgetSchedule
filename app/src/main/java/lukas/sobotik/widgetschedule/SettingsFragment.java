@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,6 +45,7 @@ public class SettingsFragment extends Fragment {
     List<SettingsEntry> settingsList;
     List<ScheduleEntry> scheduleList;
     List<String> HTMLTables;
+    TextView fragmentDescriptionTextView;
 
     boolean isScheduleURLChanged = false;
 
@@ -95,6 +98,9 @@ public class SettingsFragment extends Fragment {
         removeEmptyItemsSwitch = inflatedView.findViewById(R.id.remove_empty_items_switch);
         hideLastTableLayout = inflatedView.findViewById(R.id.hide_last_table_layout);
         hideLastTableSwitch = inflatedView.findViewById(R.id.hide_last_table_switch);
+        fragmentDescriptionTextView = inflatedView.findViewById(R.id.widget_settings_fragment_help_text_view);
+
+        fragmentDescriptionTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         loadDataFromDatabase();
 

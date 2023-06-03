@@ -26,4 +26,6 @@
     <string name="color_fragment_new_criteria">Text Criteria</string>
     <string name="color_fragment_header">Colors</string>
     <string name="color_fragment_help">Write text criteria that matches the item in your schedule and select a color to assign it to the item.</string>
+    <string name="widget_settings_fragment_header">Widget Settings</string>
+    <string name="widget_settings_fragment_help">Here you can change some settings for the widget, if you would like to see any different settings, then please open an issue in my <a href="https://github.com/PuckyEU/WidgetSchedule">Github Repository</a>.</string>
 </resources>
