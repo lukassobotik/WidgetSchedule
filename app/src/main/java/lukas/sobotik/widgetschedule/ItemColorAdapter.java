@@ -16,13 +16,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ItemColorAdapter extends BaseAdapter {
     private Context context;
     private List<String> data;
     private EditTextChangeListener listener;
     private final String TEMPORARY_EDITTEXT_TAG = "temporary_ignore_edittext_change";
+    String itemColorString = "";
     public ItemColorAdapter(Context context, List<String> data) {
         this.context = context;
         this.data = data;
@@ -60,6 +61,7 @@ public class ItemColorAdapter extends BaseAdapter {
         }
 
         String colorName = data.get(position);
+        itemColorString = getItemColorString(colorName);
         TextInputLayout itemEditText = convertView.findViewById(R.id.item_color_output);
         EditText editText = itemEditText.getEditText();
 
@@ -68,7 +70,6 @@ public class ItemColorAdapter extends BaseAdapter {
 
         View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_color_view_bottom_sheet_layout, null);
         RecyclerView recyclerView = bottomSheetView.findViewById(R.id.item_color_list_all_drawables);
-
 
         View itemColorView = convertView.findViewById(R.id.item_color_view);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
@@ -79,12 +80,14 @@ public class ItemColorAdapter extends BaseAdapter {
             itemColorDrawableAdapter.setItemClickListener(clickPosition -> {
                 int clickedDrawable = DrawableParser.getAllDrawables().get(clickPosition);
 
-                String colorCriteria = colorName.split("=")[0];
+                String colorCriteria = getItemColorCriteria(data.get(position));
                 String text = colorCriteria + "=" + DrawableParser.getDrawableName(clickedDrawable);
                 data.set(position, text);
                 if(editText != null) {
-                    editText.setText(data.get(position));
+                    editText.setText(colorCriteria);
                 }
+                textView.setText(text);
+                itemColorString = DrawableParser.getDrawableName(clickedDrawable);
 
                 itemColorView.setBackgroundResource(clickedDrawable);
 
@@ -94,8 +97,8 @@ public class ItemColorAdapter extends BaseAdapter {
             recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
         });
 
-        if (colorName.contains("=")) {
-            String itemColor = colorName.split("=")[1];
+        if (data.get(position).contains("=")) {
+            String itemColor = getItemColorString(data.get(position));
             try {
                 itemColorView.setBackgroundResource(DrawableParser.getDrawableId(itemColor));
             } catch (Exception e) {
@@ -116,7 +119,8 @@ public class ItemColorAdapter extends BaseAdapter {
             // Set the text without triggering the TextWatcher
             int oldTag = (int) editText.getTag();
             editText.setTag(TEMPORARY_EDITTEXT_TAG);
-            editText.setText(data.get(position));
+            String colorCriteria = getItemColorCriteria(data.get(position));
+            editText.setText(colorCriteria);
             editText.setTag(oldTag);
         }
         editText.addTextChangedListener(new TextWatcher() {
@@ -129,9 +133,14 @@ public class ItemColorAdapter extends BaseAdapter {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (editText.getTag() != TEMPORARY_EDITTEXT_TAG) {
                     int position = (int) editText.getTag();
+                    String string = s.toString();
+                    if (data.get(position).contains("=")) {
+                        itemColorString = getItemColorString(data.get(position));
+                        string = s + "=" + itemColorString;
+                    }
 
-                    data.set(position, s.toString());
-                    listener.onTextChanged(position, s.toString());
+                    data.set(position, string);
+                    listener.onTextChanged(position, string);
                 }
             }
 
@@ -142,5 +151,28 @@ public class ItemColorAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    public String getItemColorString(String s) {
+        if (s.contains("=")) {
+            String[] parts = s.split("=");
+            return parts[parts.length - 1];
+        } else {
+            return null;
+        }
+    }
+    public String getItemColorCriteria(String s) {
+        String[] parts = s.split("=");
+
+        StringBuilder resultBuilder = new StringBuilder();
+
+        for (int i = 0; i < parts.length - 1; i++) {
+            resultBuilder.append(parts[i]);
+            if (i != parts.length - 2) {
+                resultBuilder.append("=");
+            }
+        }
+
+        return resultBuilder.toString().trim();
     }
 }
