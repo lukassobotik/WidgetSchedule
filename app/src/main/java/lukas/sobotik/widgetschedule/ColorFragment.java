@@ -83,7 +83,17 @@ public class ColorFragment extends Fragment {
         list = new ArrayList<>();
         loadDataFromDatabase();
 
+        ItemColorAdapter.EditTextChangeListener editTextChangeListener = new ItemColorAdapter.EditTextChangeListener() {
+            @Override
+            public void onTextChanged(int position, String newText) {
+                // Handle the text change event
+                Log.d("Custom Logging", "onTextChanged: Position: " + position + ", Text: " + newText);
+                // Save the data to the database or perform any other necessary actions
+            }
+        };
+
         ItemColorAdapter colorAdapter = new ItemColorAdapter(getContext(), list);
+        colorAdapter.setEditTextChangeListener(editTextChangeListener); // Set the listener
         itemColorListView.setAdapter(colorAdapter);
 
         itemColorListView.setOnItemLongClickListener((parent, view, position, id) -> {

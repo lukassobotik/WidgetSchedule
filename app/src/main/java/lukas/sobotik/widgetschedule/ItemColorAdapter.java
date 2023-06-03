@@ -1,27 +1,44 @@
 package lukas.sobotik.widgetschedule;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class ItemColorAdapter extends BaseAdapter {
     private Context context;
     private List<String> data;
+    private EditTextChangeListener listener;
+    private final String TEMPORARY_EDITTEXT_TAG = "temporary_ignore_edittext_change";
     public ItemColorAdapter(Context context, List<String> data) {
         this.context = context;
         this.data = data;
     }
+
+    public static class EditTextChangeListener {
+        public void onTextChanged(int position, String newText) {
+            // Handle the text change event
+        }
+    }
+
+    public void setEditTextChangeListener(EditTextChangeListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public int getCount() {
         return data.size();
@@ -80,7 +97,49 @@ public class ItemColorAdapter extends BaseAdapter {
             String itemColor = colorName.split("=")[1];
             itemColorView.setBackgroundResource(DrawableParser.getDrawableId(itemColor));
         }
-        Objects.requireNonNull(itemEditText.getEditText()).setText(data.get(position));
+
+        EditText editText = itemEditText.getEditText();
+
+        // Add text change listener
+        if (editText == null) return convertView;
+
+        // Remove the previous TextWatcher
+        if (editText.getTag() instanceof TextWatcher) {
+            editText.removeTextChangedListener((TextWatcher) editText.getTag());
+        } else {
+            editText.setTag(position);
+        }
+
+        if ((int) editText.getTag() == position) {
+            // Set the text without triggering the TextWatcher
+            int oldTag = (int) editText.getTag();
+            editText.setTag(TEMPORARY_EDITTEXT_TAG);
+            editText.setText(data.get(position));
+            editText.setTag(oldTag);
+        }
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not needed, but required to implement
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (editText.getTag() != TEMPORARY_EDITTEXT_TAG) {
+                    int position = (int) editText.getTag();
+                    Log.d("Custom Logging", "position: " + position + " s: " + s);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (editText.getTag() != TEMPORARY_EDITTEXT_TAG) {
+                    data.set(position, s.toString());
+                    listener.onTextChanged(position, s.toString());
+                }
+            }
+        });
+
         return convertView;
     }
 }
