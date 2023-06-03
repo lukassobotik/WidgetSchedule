@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_margin="16dp"
-                    android:hint="@string/item_color">
+                    android:hint="@string/color_fragment_new_criteria">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -59,13 +59,6 @@
                     app:icon="@drawable/round_add"
                     />
         </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-                android:id="@+id/color_database_save_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:layout_margin="16dp" />
     </LinearLayout>
 
 </FrameLayout>

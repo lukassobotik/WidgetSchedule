@@ -30,7 +30,7 @@ public class ColorFragment extends Fragment {
     SettingsDatabaseHelper settingsDatabaseHelper;
     ListView itemColorListView;
     TextInputLayout itemColors;
-    Button saveButton, addColorButton;
+    Button addColorButton;
 
     List<String> list;
 
@@ -77,7 +77,6 @@ public class ColorFragment extends Fragment {
 
         itemColors = inflatedView.findViewById(R.id.color_text_input);
         itemColorListView = inflatedView.findViewById(R.id.color_list_view);
-        saveButton = inflatedView.findViewById(R.id.color_database_save_button);
         addColorButton = inflatedView.findViewById(R.id.color_add_button);
 
         list = new ArrayList<>();
@@ -122,10 +121,7 @@ public class ColorFragment extends Fragment {
                 colorAdapter.notifyDataSetChanged();
                 itemColors.getEditText().setText("");
             }
-        });
-
-        saveButton.setOnClickListener(view -> {
-            saveDataToDatabase();
+            scheduleSaveOperation();
         });
 
         return inflatedView;

@@ -18,7 +18,7 @@
             android:id="@+id/item_color_output"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/item_colors"
+            android:hint="@string/color_fragment_new_criteria"
             android:layout_marginEnd="4dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
