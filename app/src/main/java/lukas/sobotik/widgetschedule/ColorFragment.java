@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -106,6 +105,7 @@ public class ColorFragment extends Fragment {
                     .setPositiveButton("Delete", (dialog, which) -> {
                         list.remove(position);
                         colorAdapter.notifyDataSetChanged();
+                        scheduleSaveOperation();
                     })
                     .show();
             return true;

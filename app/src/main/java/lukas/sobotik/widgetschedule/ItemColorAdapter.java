@@ -16,7 +16,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ItemColorAdapter extends BaseAdapter {
     private Context context;
@@ -171,6 +170,10 @@ public class ItemColorAdapter extends BaseAdapter {
             if (i != parts.length - 2) {
                 resultBuilder.append("=");
             }
+        }
+
+        if (parts.length == 1) {
+            resultBuilder.append(parts[0]);
         }
 
         return resultBuilder.toString().trim();

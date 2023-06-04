@@ -3,7 +3,6 @@ package lukas.sobotik.widgetschedule;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DrawableParser {
     public static HashMap<String, Integer> drawableMap;

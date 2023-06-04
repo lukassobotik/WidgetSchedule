@@ -15,7 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Objects;
 
 /**
  * Implementation of App Widget functionality.
