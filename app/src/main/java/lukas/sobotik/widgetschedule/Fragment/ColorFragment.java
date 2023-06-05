@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.Fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import lukas.sobotik.widgetschedule.*;
 
 import java.util.*;
 

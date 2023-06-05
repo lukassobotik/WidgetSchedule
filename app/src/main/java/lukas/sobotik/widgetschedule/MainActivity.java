@@ -4,6 +4,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import lukas.sobotik.widgetschedule.Fragment.ColorFragment;
+import lukas.sobotik.widgetschedule.Fragment.ScheduleFragment;
+import lukas.sobotik.widgetschedule.Fragment.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;

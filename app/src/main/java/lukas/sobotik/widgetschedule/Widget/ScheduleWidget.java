@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.Widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 import androidx.appcompat.app.AppCompatActivity;
+import lukas.sobotik.widgetschedule.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 

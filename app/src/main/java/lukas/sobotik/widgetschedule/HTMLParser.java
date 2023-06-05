@@ -1,6 +1,7 @@
 package lukas.sobotik.widgetschedule;
 
 import android.util.Log;
+import lukas.sobotik.widgetschedule.Widget.CalendarEvent;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

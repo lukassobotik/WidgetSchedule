@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.Widget;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import lukas.sobotik.widgetschedule.*;
 
 import java.time.LocalDate;
 import java.util.*;
