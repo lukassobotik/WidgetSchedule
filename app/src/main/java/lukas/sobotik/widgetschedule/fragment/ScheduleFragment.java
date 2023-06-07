@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule.Fragment;
+package lukas.sobotik.widgetschedule.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import lukas.sobotik.widgetschedule.R;
-import lukas.sobotik.widgetschedule.ScheduleAdapter;
-import lukas.sobotik.widgetschedule.ScheduleDatabaseHelper;
-import lukas.sobotik.widgetschedule.ScheduleEntry;
+import lukas.sobotik.widgetschedule.adapter.ScheduleAdapter;
+import lukas.sobotik.widgetschedule.database.ScheduleDatabaseHelper;
+import lukas.sobotik.widgetschedule.entity.ScheduleEntry;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

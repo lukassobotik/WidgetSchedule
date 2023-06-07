@@ -1,8 +1,9 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.adapter;
 
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import lukas.sobotik.widgetschedule.R;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemColorDrawableVH extends RecyclerView.ViewHolder {

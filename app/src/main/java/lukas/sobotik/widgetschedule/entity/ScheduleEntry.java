@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.entity;
 
 import androidx.annotation.NonNull;
 

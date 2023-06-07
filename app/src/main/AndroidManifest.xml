@@ -17,7 +17,7 @@
             tools:targetApi="31"
             tools:remove="android:appComponentFactory">
         <receiver
-                android:name=".Widget.ScheduleWidget"
+                android:name=".widget.ScheduleWidget"
                 android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -42,8 +42,8 @@
                     android:value=""/>
         </activity>
         
-        <activity android:name=".Widget.ScheduleWidget$RefreshActivity" />
+        <activity android:name=".widget.ScheduleWidget$RefreshActivity" />
 
-        <service android:name=".Widget.ScheduleWidgetCalendarService" android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".widget.ScheduleWidgetCalendarService" android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 </manifest>

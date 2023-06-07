@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule.Fragment;
+package lukas.sobotik.widgetschedule.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,6 +16,11 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import lukas.sobotik.widgetschedule.*;
+import lukas.sobotik.widgetschedule.database.ScheduleDatabaseHelper;
+import lukas.sobotik.widgetschedule.database.SettingsDatabaseHelper;
+import lukas.sobotik.widgetschedule.entity.ScheduleEntry;
+import lukas.sobotik.widgetschedule.entity.Settings;
+import lukas.sobotik.widgetschedule.entity.SettingsEntry;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 

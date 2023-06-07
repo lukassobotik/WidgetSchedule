@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import lukas.sobotik.widgetschedule.entity.ScheduleEntry;
 
 public class ScheduleDatabaseHelper extends SQLiteOpenHelper {
     Context context;
@@ -43,7 +44,7 @@ public class ScheduleDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_ID, entry.getId());
-        cv.put(COLUMN_SCHEDULE_NAME, entry.getScheduleName().toString());
+        cv.put(COLUMN_SCHEDULE_NAME, entry.getScheduleName());
         cv.put(COLUMN_SCHEDULE_HTML, entry.getScheduleHTML());
 
         long result = db.insert(TABLE_NAME, null, cv);
@@ -56,7 +57,7 @@ public class ScheduleDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    Cursor readAllData() {
+    public Cursor readAllData() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
@@ -69,7 +70,7 @@ public class ScheduleDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_ID, entry.getId());
-        cv.put(COLUMN_SCHEDULE_NAME, entry.getScheduleName().toString());
+        cv.put(COLUMN_SCHEDULE_NAME, entry.getScheduleName());
         cv.put(COLUMN_SCHEDULE_HTML, entry.getScheduleHTML());
 
         String stringId = String.valueOf(entry.getId());

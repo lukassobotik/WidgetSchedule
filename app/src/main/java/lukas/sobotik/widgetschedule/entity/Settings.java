@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.entity;
 
 public class Settings {
     public final int ScheduleURL = 0;

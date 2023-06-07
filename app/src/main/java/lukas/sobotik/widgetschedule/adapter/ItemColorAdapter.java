@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule;
+package lukas.sobotik.widgetschedule.adapter;
 
 import android.content.Context;
 import android.text.Editable;
@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputLayout;
+import lukas.sobotik.widgetschedule.DrawableParser;
+import lukas.sobotik.widgetschedule.R;
 
 import java.util.List;
 

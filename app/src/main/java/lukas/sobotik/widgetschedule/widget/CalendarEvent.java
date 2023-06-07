@@ -1,4 +1,4 @@
-package lukas.sobotik.widgetschedule.Widget;
+package lukas.sobotik.widgetschedule.widget;
 
 import android.util.Log;
 
