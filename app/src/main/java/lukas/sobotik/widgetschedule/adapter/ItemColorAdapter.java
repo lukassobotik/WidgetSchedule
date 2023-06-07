@@ -20,8 +20,8 @@ import lukas.sobotik.widgetschedule.R;
 import java.util.List;
 
 public class ItemColorAdapter extends BaseAdapter {
-    private Context context;
-    private List<String> data;
+    private final Context context;
+    private final List<String> data;
     private EditTextChangeListener listener;
     private final String TEMPORARY_EDITTEXT_TAG = "temporary_ignore_edittext_change";
     String itemColorString = "";
@@ -32,7 +32,7 @@ public class ItemColorAdapter extends BaseAdapter {
 
     public static class EditTextChangeListener {
         public void onTextChanged(int position, String newText) {
-            // Handle the text change event
+
         }
     }
 
@@ -69,7 +69,7 @@ public class ItemColorAdapter extends BaseAdapter {
         TextView textView = convertView.findViewById(R.id.item_color_name);
         textView.setText("");
 
-        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_color_view_bottom_sheet_layout, null);
+        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_color_view_bottom_sheet_layout, parent, false);
         RecyclerView recyclerView = bottomSheetView.findViewById(R.id.item_color_list_all_drawables);
 
         View itemColorView = convertView.findViewById(R.id.item_color_view);

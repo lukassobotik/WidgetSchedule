@@ -22,9 +22,6 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.util.Objects;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class ScheduleWidget extends AppWidgetProvider {
     public static final String ACTION_REFRESH = "lukas.sobotik.WidgetSchedule.REFRESH";
     public static final String ACTION_CURRENT_ITEMS = "lukas.sobotik.WidgetSchedule.CURRENT_ITEMS";
@@ -73,12 +70,12 @@ public class ScheduleWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+        Log.d("Custom Logging", "Enabled");
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+        Log.d("Custom Logging", "Disabled");
     }
 
     @Override
@@ -103,15 +100,13 @@ public class ScheduleWidget extends AppWidgetProvider {
                 }
             }
         } else if (ACTION_CURRENT_ITEMS.equals(intent.getAction())) {
-            // Get a reference to the RemoteViewsService
             ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory factory =
-                    new ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory(context.getApplicationContext(), intent);
+                    new ScheduleWidgetCalendarService.ScheduleWidgetCalendarFactory(context.getApplicationContext());
 
             int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
 
             factory.swapData(appWidgetIds, context);
 
-            // Notify the AppWidgetManager about the data change
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.calendar_listview);
         }

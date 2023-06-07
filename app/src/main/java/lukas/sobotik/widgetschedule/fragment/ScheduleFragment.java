@@ -19,65 +19,26 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ScheduleFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ScheduleFragment extends Fragment {
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
-
     List<ScheduleEntry> scheduleList;
-
+    ScheduleDatabaseHelper scheduleDatabaseHelper;
     public ScheduleFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment scheduleFragment.
-     */
-    public static ScheduleFragment newInstance(String param1, String param2) {
-        ScheduleFragment fragment = new ScheduleFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View inflatedView = inflater.inflate(R.layout.fragment_schedule, container, false);
 
         ListView listView = inflatedView.findViewById(R.id.schedule_list_view);
 
-        List<String> items = new ArrayList<>();
-        items.add("Hello");
-        items.add("There");
-        items.add("My");
-        items.add("Friend");
-
         scheduleList = new ArrayList<>();
+        scheduleDatabaseHelper = new ScheduleDatabaseHelper(getContext());
         loadDataFromDatabase();
 
         List<String> tableHTMLs = new ArrayList<>();
@@ -98,7 +59,7 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void loadDataFromDatabase() {
-        Cursor scheduleCursor = new ScheduleDatabaseHelper(getContext()).readAllData();
+        Cursor scheduleCursor = scheduleDatabaseHelper.readAllData();
         if (scheduleCursor.getCount() == 0) {
             return;
         }

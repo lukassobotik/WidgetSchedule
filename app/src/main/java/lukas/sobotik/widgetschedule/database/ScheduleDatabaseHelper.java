@@ -73,9 +73,7 @@ public class ScheduleDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_SCHEDULE_NAME, entry.getScheduleName());
         cv.put(COLUMN_SCHEDULE_HTML, entry.getScheduleHTML());
 
-        String stringId = String.valueOf(entry.getId());
-
-        long result = db.update(TABLE_NAME, cv, COLUMN_ID + "= ?", new String[]{stringId});
+        long result = db.update(TABLE_NAME, cv, COLUMN_ID + "= ?", new String[]{String.valueOf(entry.getId())});
         if (result == -1) {
             Toast.makeText(context, "Failed to edit the Data", Toast.LENGTH_SHORT).show();
         } else {
@@ -88,9 +86,7 @@ public class ScheduleDatabaseHelper extends SQLiteOpenHelper {
         String stringId = String.valueOf(entry.getId());
 
         long result = db.delete(TABLE_NAME,COLUMN_ID + "= ?", new String[]{stringId});
-        if (result == -1) {
-            Toast.makeText(context, "Failed to delete the Data", Toast.LENGTH_SHORT).show();
-        }
+        if (result == -1) Toast.makeText(context, "Failed to delete the Data", Toast.LENGTH_SHORT).show();
     }
 }
 

@@ -24,13 +24,12 @@ import static lukas.sobotik.widgetschedule.DrawableParser.getDrawableId;
 public class ScheduleWidgetCalendarService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ScheduleWidgetCalendarFactory(this.getApplicationContext(), intent);
+        return new ScheduleWidgetCalendarFactory(this.getApplicationContext());
     }
 
     static class ScheduleWidgetCalendarFactory implements RemoteViewsFactory {
 
         private final Context context;
-        private int appWidgetId;
         private static List<CalendarEvent> allEvents;
         private static List<CalendarEvent> currentEvents;
         private List<String> colorList;
@@ -44,9 +43,8 @@ public class ScheduleWidgetCalendarService extends RemoteViewsService {
         static boolean ignoreDatasetChanged = false;
         static boolean isShowingAllEvents = true;
 
-        ScheduleWidgetCalendarFactory(Context context, Intent intent) {
+        ScheduleWidgetCalendarFactory(Context context) {
             this.context = context;
-            this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
         public static void swapData(int[] appWidgetIds, Context context) {

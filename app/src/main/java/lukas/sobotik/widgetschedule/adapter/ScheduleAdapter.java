@@ -12,8 +12,8 @@ import lukas.sobotik.widgetschedule.R;
 import java.util.List;
 
 public class ScheduleAdapter extends BaseAdapter {
-    private Context context;
-    private List<String> data;
+    private final Context context;
+    private final List<String> data;
 
     public ScheduleAdapter(Context context, List<String> data) {
         this.context = context;

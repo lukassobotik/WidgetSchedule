@@ -16,8 +16,8 @@ public class ItemColorDrawableAdapter extends RecyclerView.Adapter<ItemColorDraw
         void onItemClick(int position);
     }
 
-    private Context context;
-    private List<Integer> data;
+    private final Context context;
+    private final List<Integer> data;
 
     private OnItemClickListener listener;
 

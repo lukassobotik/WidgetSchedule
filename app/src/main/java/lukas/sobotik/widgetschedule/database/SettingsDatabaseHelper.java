@@ -83,9 +83,8 @@ public class SettingsDatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteItem(SettingsEntry entry) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String stringId = String.valueOf(entry.getId());
 
-        long result = db.delete(TABLE_NAME,COLUMN_ID + "= ?", new String[]{stringId});
+        long result = db.delete(TABLE_NAME,COLUMN_ID + "= ?", new String[]{String.valueOf(entry.getId())});
         if (result == -1) {
             Toast.makeText(context, "Failed to delete the Data", Toast.LENGTH_SHORT).show();
         }
