@@ -37,7 +37,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="16dp">
 
             <ListView
                     android:id="@+id/color_list_view"
@@ -50,35 +52,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="4dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/color_text_input"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="16dp"
-                    android:hint="@string/color_fragment_new_criteria">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/color_text_input"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:inputType="textUri" />
-            </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:hint="@string/color_fragment_new_criteria"
+                        app:layout_constraintEnd_toStartOf="@+id/color_add_button"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-            <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.IconButton.Filled"
-                    android:id="@+id/color_add_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:padding="16dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/add"
-                    app:icon="@drawable/round_add"
-                    />
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textUri"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3.Button.IconButton.Filled"
+                        android:id="@+id/color_add_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="0dp"
+                        android:contentDescription="@string/add"
+                        app:icon="@drawable/round_add"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/color_text_input"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </LinearLayout>
 
