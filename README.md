@@ -14,7 +14,6 @@ WidgetSchedule is a useful and free Android app for managing your schedules. It 
 #### Key Features:
 - Schedule Widget: Convert any URL-based schedule into a dynamic Android widget. Simply enter the URL, and WidgetSchedule will retrieve and display the info on your home screen. Keep track of your appointments and events at a glance.
 - Customizable Colors: Customize your widget items by selecting from a variety of colors.
-- Google Calendar Integration: Export your schedules to Google Calendar with ease. You can synchronize your events and appointments with a few taps, providing smooth coordination across platforms.
 - WidgetSchedule is an open-source project, which means that anybody can read, alter, and contribute to its code. This promotes openness, security, and innovation, making WidgetSchedule a dependable and trustworthy scheduling solution.
 - Privacy-focused: WidgetSchedule values your privacy. It does not collect or send data from your device to any external servers. All of your schedule information is kept locally, giving you piece of mind.
 
