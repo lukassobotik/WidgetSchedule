@@ -5,7 +5,7 @@
 <h1 align="center">WidgetSchedule</h1>
 <h3 align="center">Turn online schedules into stunning widgets with ease!</h3>
 <p align="center">
-<a href="https://play.google.com/store/apps/details?id=lukas.sobotik.widgetschedule">Play Store</a> | <a href="https://www.buymeacoffee.com/lukassobotik">Support Me</a> | <a href="https://www.lukassobotik.dev/project/WidgetSchedule">Website</a> | <a href="https://github.com/lukassobotik/WidgetSchedule/blob/master/PrivacyPolicy.md">Privacy Policy</a>
+<a href="https://play.google.com/store/apps/details?id=lukas.sobotik.widgetschedule">Play Store</a> | <a href="https://www.buymeacoffee.com/lukassobotik">Support Me</a> | <a href="https://www.lukassobotik.dev/project/WidgetSchedule">Website</a> | <a href="https://github.com/lukassobotik/WidgetSchedule/blob/master/PrivacyPolicy.md">Privacy Policy</a> | <a href="https://github.com/lukassobotik/WidgetSchedule/blob/master/LICENSE">License</a>
 </p>
 
 ### Overview
